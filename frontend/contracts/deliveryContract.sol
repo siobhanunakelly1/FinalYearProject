@@ -10,6 +10,7 @@ contract Delivery {
 
     constructor() {
         seller = msg.sender;
+        status = "created";
     }
 
     function collected() public{
