@@ -2,18 +2,24 @@
 
 pragma solidity >=0.7.4;
 
-contract Counter {
-    
-    event ValueChanged(uint oldValue, uint256 newValue);
-    // Public variable of type unsigned int to keep the number of counts
-    uint256 public count = 0;
-    // Function that increments our counter
-    function increment() public {
-        count += 1;
-        emit ValueChanged(count - 1, count);
+contract Delivery {
+    address public seller;
+    address public transporter;
+    address public buyer;
+    string public status;
+
+    constructor() {
+        seller = msg.sender;
     }
-    // Not necessary getter to get the count value
-    function getCount() public view returns (uint256) {
-        return count;
+
+    function collected() public{
+        require(msg.sender == transporter, "Only transporter can collect goods");
+        status = "Collected";
+    }
+
+    function recieved() public{
+        require(msg.sender == buyer, "Only buyer can recieve the goods");
+        status = "Received";
     }
 }
+
