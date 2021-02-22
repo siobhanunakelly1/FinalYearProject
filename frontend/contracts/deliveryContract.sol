@@ -8,10 +8,13 @@ contract Delivery {
     address public buyer;
     string public status;
 
-    constructor() {
+    constructor(address aTransporter, address aBuyer) {
         seller = msg.sender;
-        status = "created";
+        transporter = aTransporter;
+        buyer = aBuyer;
+        status = "Created";
     }
+    
 
     function collected() public{
         require(msg.sender == transporter, "Only transporter can collect goods");

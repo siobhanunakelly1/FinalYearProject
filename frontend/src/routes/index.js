@@ -4,6 +4,7 @@ import Router from 'vue-router';
 import Login from '../components/Login'
 import Dashboard from '../components/Dashboard'
 import Register from '../components/Register'
+import RegisterDetails from '../components/RegisterDetails'
 
 Vue.use(Router)
 
@@ -25,6 +26,11 @@ const router = new Router({
         path: '/dashboard',
         name: 'Dashboard',
         component: Dashboard
+    },
+    {
+        path: '/registerDetails',
+        name: 'registerDetails',
+        component: RegisterDetails
     }
 ]
 });

@@ -13,9 +13,15 @@ import App from "./App.vue";
 import firebase from "firebase";
 import router from './routes'
 import store from './store'
-import LogRocket from 'logrocket';
-LogRocket.init('yq24nw/fyp');
 
+import '@progress/kendo-ui'
+import '@progress/kendo-theme-material/dist/all.css'
+
+import { Pager,
+        ListView,
+        ListViewInstaller } from '@progress/kendo-listview-vue-wrapper'
+
+Vue.use(ListViewInstaller)
 
 
 Vue.config.productionTip = false;
@@ -39,5 +45,7 @@ firebase.auth().onAuthStateChanged(user => {
 new Vue({
   router,
   store,
+  Pager,
+  ListView,
   render: h => h(App)
 }).$mount("#app");
