@@ -36,7 +36,7 @@ export default {
 };*/
 
 import firebase from 'firebase'
-import deploy from '../deploy'
+//import deploy from '../deploy'
 /*const ganache = require('ganache-cli');
 const Web3 = require('web3');
 //connects to test network ganache, when running on different network e.g. Rinkeby, change "ganache.provider()"
@@ -80,15 +80,13 @@ let accounts;*/
           if (user) {
                 this.user = user
              } else {
-                console.log('No user1')
                 this.user = null
                 }
               });
         },
         methods: {
           async createDelivery(){
-            console.log("hi");
-            deploy('0xe90a1BD2f2b82b540F1975eA288AFe0b47ed1884', '0xe90a1BD2f2b82b540F1975eA288AFe0b47ed1884', '0xe90a1BD2f2b82b540F1975eA288AFe0b47ed1884')
+            //deploy('0xe90a1BD2f2b82b540F1975eA288AFe0b47ed1884', '0xe90a1BD2f2b82b540F1975eA288AFe0b47ed1884', '0xe90a1BD2f2b82b540F1975eA288AFe0b47ed1884')
           }
         }
     };
