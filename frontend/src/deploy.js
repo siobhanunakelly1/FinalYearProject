@@ -1,34 +1,29 @@
+/*const Web3 = require('web3');
 
-const Web3 = require('web3');
-var web3 = new Web3(Web3.givenProvider);
-/*
-async function loadWeb3() {
-    if (window.ethereum) {
-        window.web3 = new Web3(window.ethereum);
-        window.ethereum.enable();
-    }
-}
+const HDWalletProvider = require('truffle-hdwallet-provider');
 
-async function load() {
-    await loadWeb3();
-}
+const provider = new HDWalletProvider(
+    'endless lottery tornado season various author bunker mix human scene police exact',
+    'https://rinkeby.infura.io/v3/b5d23e54374e4956800cdccde15e8d28'
+);
+const web3 = new Web3(provider);*/
 
-load();*/
-
+import web3 from './web3'
 
 const contractFile = require('../compile');
 
 const bytecode = contractFile.evm.bytecode.object;
 const abi = contractFile.abi;
 
-//let delivery;
-//let accounts;
+let delivery;
 
-async function deploy(seller, transporter, buyer){
-    const delivery = await new web3.eth.Contract(abi)
+const deploy = async (transporter, buyer) =>{
+    const accounts = await web3.eth.getAccounts();
+    delivery = await new web3.eth.Contract(abi)
     .deploy({data: bytecode, arguments: [transporter, buyer]})
-    .send({ from: seller, gas: '5000000'});
+    .send({ from: accounts[0], gas: '5000000'});
     console.log(delivery.options.address);
 }
 
-deploy();
+//deploy('0x10863742Fd543f441325588c35f81517ef08A7f9', '0xd86Fdd7BC008dA187c9e52934f975ABbc9d492fd');
+export default deploy;

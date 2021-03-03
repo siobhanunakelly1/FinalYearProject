@@ -23,13 +23,13 @@ beforeEach(async() => {
     delivery = await new web3.eth.Contract(abi)
         .deploy({data: bytecode, arguments: [accounts[1], accounts[2]]})
         .send({ from: accounts[4], gas: '5000000'});
-        console.log(accounts);
     
 });
 
 describe("Contract Creation", async() => {
     it("deploys a contract", () => {
-        assert.ok(delivery.options.address)
+        console.log(delivery.options.address);
+        assert.ok(delivery.options.address);
     });
     it("transporter is set", async () => {
         const transporter = await delivery.methods.transporter().call();

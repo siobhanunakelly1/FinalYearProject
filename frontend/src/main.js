@@ -9,6 +9,7 @@ new Vue({
 
 
 import Vue from "vue";
+import VueWorker from 'vue-worker';
 import App from "./App.vue";
 import firebase from "firebase";
 import router from './routes'
@@ -22,7 +23,7 @@ import { Pager,
         ListViewInstaller } from '@progress/kendo-listview-vue-wrapper'
 
 Vue.use(ListViewInstaller)
-
+Vue.use(VueWorker)
 
 Vue.config.productionTip = false;
 

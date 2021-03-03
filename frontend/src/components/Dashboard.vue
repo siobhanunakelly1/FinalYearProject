@@ -36,18 +36,9 @@ export default {
 };*/
 
 import firebase from 'firebase'
-//import deploy from '../deploy'
-/*const ganache = require('ganache-cli');
-const Web3 = require('web3');
-//connects to test network ganache, when running on different network e.g. Rinkeby, change "ganache.provider()"
-const web3 = new Web3(ganache.provider());
+//import web3 from '../web3'
+import deploy from '../deploy'
 
-const contractFile = require('/compile');
-
-const bytecode = contractFile.evm.bytecode.object;
-const abi = contractFile.abi;
-let delivery;
-let accounts;*/
 
     export default {
         data() {
@@ -86,8 +77,10 @@ let accounts;*/
         },
         methods: {
           async createDelivery(){
-            //deploy('0xe90a1BD2f2b82b540F1975eA288AFe0b47ed1884', '0xe90a1BD2f2b82b540F1975eA288AFe0b47ed1884', '0xe90a1BD2f2b82b540F1975eA288AFe0b47ed1884')
-          }
+            deploy('0x10863742Fd543f441325588c35f81517ef08A7f9', '0xd86Fdd7BC008dA187c9e52934f975ABbc9d492fd');
+            
+
+            }
         }
     };
         
