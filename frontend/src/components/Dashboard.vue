@@ -4,19 +4,16 @@
       <div class="col-md-8">
         <div class="card">
           <div class ="card-head">
-            <div class = "buttons">
-              <button>Search</button>
-              <button>Filter</button>
-              <button>Sort</button>
-            </div> 
             <button @click="createDelivery">Create</button>
           </div>
           <div class="card-body">          
-            <div id="app">
-              
-              <kendo-listview :data-source="deliveries" :template="template">
-              </kendo-listview>
-              
+            <div class="list">
+              <ul id="example-1">
+                <li v-for="item in list" :key="item">
+                  <b>Contract Address:</b> {{ item.address  }} <b>Status: </b>{{item.status}}
+                  <br>
+                </li>
+              </ul>
             </div>  
           </div>
         </div>
@@ -35,19 +32,21 @@ export default {
   }
 };*/
 
-import firebase from 'firebase'
-//import web3 from '../web3'
-import deploy from '../deploy'
+import firebase from 'firebase';
+import web3 from '../../contracts/web3-metamask';
+import delivery from '../../contracts/DeliveryInstance';
+import deliveries from '../../contracts/DeliveriesInstance';
 
 
     export default {
         data() {
             return {
                 user: null,
-                deliveries: [
-                  { number: 1 , coll: "wexford", dest: "dublin"},
-                  { number: 2 , coll: "louth", dest: "carlow"},
-                  { number: 3 , coll: "cork", dest: "longford"}
+                deliveryAddress: '',
+                deliveries: '',
+                listDeliveries: '',
+                list: [
+
                 ],
                 template: `
                 <div class = "hello">
@@ -67,21 +66,56 @@ import deploy from '../deploy'
             
         },
         created(){
+        this.getAllDeliveries();
         firebase.default.auth().onAuthStateChanged(user => {
+          console.log(user);
           if (user) {
-                this.user = user
+                this.user = user;
+                
              } else {
-                this.user = null
+                this.user = null;
                 }
-              });
+              }); 
         },
         methods: {
           async createDelivery(){
-            deploy('0x10863742Fd543f441325588c35f81517ef08A7f9', '0xd86Fdd7BC008dA187c9e52934f975ABbc9d492fd');
-            
+              //this.$router.replace({name: "newDelivery"});
 
+              web3.eth.getAccounts().then((accounts) => {
+                return deliveries.methods.createDelivery('0x10863742Fd543f441325588c35f81517ef08A7f9', '0xd86Fdd7BC008dA187c9e52934f975ABbc9d492fd')
+                .send({from: accounts[0]});
+              }).then(() => {
+                return deliveries.methods.returnAllDeliveries().call();
+              }).then((listDeliveries) => {
+                this.listDeliveries = listDeliveries;
+                const index = listDeliveries.length -1;
+                console.log(listDeliveries.length);
+                this.deliveryAddress = listDeliveries[index];
+                console.log(this.deliveryAddress);
+                const deliveryInstance = delivery(listDeliveries[index]);
+                return deliveryInstance.methods.status().call();
+              }).then((status) => {
+                console.log(status);
+              }).catch((err) => {
+                 console.log(err);
+              });
+            },
+            async getAllDeliveries(){
+              var allDeliveries = await deliveries.methods.returnAllDeliveries().call();
+              var i;
+              for(i = 0; i < allDeliveries.length; i++){
+                const deliveryInstance = delivery(allDeliveries[i]);
+                var status = await deliveryInstance.methods.status().call();
+                const deliveryView = {
+                  address: allDeliveries[i], status: status
+                }
+                this.list.push(deliveryView);
+              }
+              
             }
-        }
+            
+          }  
+        
     };
         
 </script>
@@ -134,5 +168,12 @@ import deploy from '../deploy'
   display: inline-block;
   font-weight: bold;
 }
+
+li {
+  margin: 0 0 3px 0;
+  font-size: 14px;
+}
+
+
 </style>
 

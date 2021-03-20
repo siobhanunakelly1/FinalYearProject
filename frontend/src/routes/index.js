@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import NewDelivery from '../components/NewDelivery'
 //import HelloWorld from '../components/HelloWord'
 import Login from '../components/Login'
 import Dashboard from '../components/Dashboard'
@@ -31,6 +32,11 @@ const router = new Router({
         path: '/registerDetails',
         name: 'registerDetails',
         component: RegisterDetails
+    },
+    {
+        path: '/newDelivery',
+        name: 'newDelivery',
+        component: NewDelivery
     }
 ]
 });

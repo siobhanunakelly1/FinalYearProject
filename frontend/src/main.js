@@ -9,21 +9,21 @@ new Vue({
 
 
 import Vue from "vue";
-import VueWorker from 'vue-worker';
 import App from "./App.vue";
 import firebase from "firebase";
-import router from './routes'
-import store from './store'
+import router from './routes';
+import store from './store';
 
-import '@progress/kendo-ui'
-import '@progress/kendo-theme-material/dist/all.css'
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
+//import './app.scss';
+import 'node_modules/bootstrap/scss/bootstrap.scss';
+import 'node_modules/bootstrap-vue/src/index.scss';
 
-import { Pager,
-        ListView,
-        ListViewInstaller } from '@progress/kendo-listview-vue-wrapper'
+// Make BootstrapVue available throughout your project
+Vue.use(BootstrapVue)
+// Optionally install the BootstrapVue icon components plugin
+Vue.use(IconsPlugin)
 
-Vue.use(ListViewInstaller)
-Vue.use(VueWorker)
 
 Vue.config.productionTip = false;
 

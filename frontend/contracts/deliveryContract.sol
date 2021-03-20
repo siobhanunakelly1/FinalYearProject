@@ -2,14 +2,31 @@
 
 pragma solidity >=0.7.4;
 
+contract Deliveries{
+    Delivery[] public deliveries;
+
+    function createDelivery (
+    address transporter,
+    address buyer
+    ) public{
+        Delivery newDelivery = new Delivery(msg.sender, transporter, buyer);
+        deliveries.push(newDelivery);
+    }
+
+    function returnAllDeliveries() public view returns(Delivery[] memory){
+        return deliveries;
+    }
+
+}
+
 contract Delivery {
     address public seller;
     address public transporter;
     address public buyer;
     string public status;
 
-    constructor(address aTransporter, address aBuyer) {
-        seller = msg.sender;
+    constructor(address aSeller, address aTransporter, address aBuyer) {
+        seller = aSeller;
         transporter = aTransporter;
         buyer = aBuyer;
         status = "Created";
@@ -25,5 +42,7 @@ contract Delivery {
         require(msg.sender == buyer, "Only buyer can recieve the goods");
         status = "Received";
     }
+
+    
 }
 
