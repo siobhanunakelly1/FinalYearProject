@@ -12,6 +12,7 @@ new Vue({
 
 import Vue from "vue";
 import './plugins/bootstrap-vue'
+import './plugins/bootstrap-vue'
 import App from "./App.vue";
 import firebase from "firebase";
 import router from './routes';
@@ -49,7 +50,5 @@ firebase.auth().onAuthStateChanged(user => {
 new Vue({
   router,
   store,
-  Pager,
-  ListView,
   render: h => h(App)
 }).$mount("#app");
