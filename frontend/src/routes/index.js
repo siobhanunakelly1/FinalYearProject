@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import NewDelivery from '../components/NewDelivery'
+import CreateDelivery from '../components/CreateDelivery'
 //import HelloWorld from '../components/HelloWord'
 import Login from '../components/Login'
 import Dashboard from '../components/Dashboard'
@@ -34,9 +34,9 @@ const router = new Router({
         component: RegisterDetails
     },
     {
-        path: '/newDelivery',
-        name: 'newDelivery',
-        component: NewDelivery
+        path: '/createDelivery',
+        name: 'createDelivery',
+        component: CreateDelivery
     }
 ]
 });

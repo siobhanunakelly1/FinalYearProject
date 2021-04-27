@@ -1,33 +1,24 @@
-import '@babel/polyfill'
+
 import 'mutationobserver-shim'
-/*import Vue from 'vue'
-import App from './App.vue'
-
-Vue.config.productionTip = false
-
-new Vue({
-  render: h => h(App),
-}).$mount('#app')*/
 
 
-import Vue from "vue";
-import './plugins/bootstrap-vue'
-import './plugins/bootstrap-vue'
-import App from "./App.vue";
-import firebase from "firebase";
-import router from './routes';
-import store from './store';
 
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
-//import './app.scss';
-import 'node_modules/bootstrap/scss/bootstrap.scss';
-import 'node_modules/bootstrap-vue/src/index.scss';
+import Vue from 'vue'
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import App from "./App.vue"
+import firebase from "firebase"
+import router from './routes'
+import store from './store'
+import axios from 'axios'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
 
+Vue.prototype.$axios = axios;
 
 Vue.config.productionTip = false;
 

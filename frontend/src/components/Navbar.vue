@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="user" class="alert alert-success" role="alert">Logged in </div>
+        <div v-if="loggedIn"> {{ name }} Logged in </div>
         <span v-else>Not logged in</span>
         <div>
             <button @click="signOut">Sign Out</button>
@@ -20,17 +20,20 @@ import firebase from "firebase"
         },*/
         data() {
             return {
-                user: null
+                loggedIn: false,
+                user: null,
+                name: ""
                 }
             
         },
         created(){
         firebase.default.auth().onAuthStateChanged(user => {
           if (user) {
-                this.user = user
+                this.loggedIn = true
+                this.name = user.displayName;
+                console.log(this.name);
              } else {
-                console.log('No user2')
-                this.user = null
+                this.loggedIn = false
                 }
               });
 
@@ -38,7 +41,7 @@ import firebase from "firebase"
         methods: {
             async signOut(){
                 try{
-                    const data = firebase.default.auth().signOut();
+                    const data = await firebase.default.auth().signOut();
                     console.log(data);
                     this.$router.replace({name: "login"})
                 }catch(err){

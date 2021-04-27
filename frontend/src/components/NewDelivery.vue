@@ -7,7 +7,9 @@
                 <input v-model="description" placeholder="Description">
             </div>
             <div>
-            <dropdown :options="list" :selected="item" v-on:updateOption="methodToRunOnSelect"></dropdown>
+              <b-form-select v-model="selected" :options="options"></b-form-select>
+              <b-form-select v-model="selected" :options="options" size="sm" class="mt-3"></b-form-select>
+              <div class="mt-3">Selected: <strong>{{ selected }}</strong></div>
             </div>
             <button type="create">Create</button>
         </form>
@@ -15,13 +17,14 @@
 </template>
 
 <script>
-import dropdown from 'vue-dropdowns';
+//import dropdown from 'vue-dropdowns';
 import firebase from 'firebase';
 
 export default {
         data() {
           return {
             buyerList: [],
+            list: [],
             sellerList: [],
             description: '',
             error: '',
@@ -38,20 +41,20 @@ export default {
           ref.once('value', function(snapshot) {
           var listSellers = [];
             snapshot.forEach(function(childSnapshot) {
-              var key = childSnapshot.key;
+              //var key = childSnapshot.key;
               var data = childSnapshot.val();
               //"hi";
               // ...
 
-              listSellers.push({ key: key, address: data.Address});
+              listSellers.push({ name: data.Company});
+              
             });
+            this.sellerList = listSellers;
             console.log(listSellers);
           });
         },
 
-        components: {
-            'dropdown': dropdown,
-        },
+        
 
         methods: {
           methodToRunOnSelect(payload) {

@@ -4,15 +4,19 @@
         <form @submit.prevent="pressed">
             Enter Your Details {{user.displayName}}
             <div>
-                <input type="radio" id="seller" value="Seller" v-model="picked">
-                <label for="seller">Seller/Buyer</label>
-                <input type="radio" id="transporter" value="Transporter" v-model="picked">
-                <label for="transporter">Transporter</label>
+                <input type="radio" id="customer" value="Customer" v-model="picked">
+                <label for="customer">Customer</label>
+                <input type="radio" id="admin" value="Administrator" v-model="picked">
+                <label for="admin">Administrator</label>
+            </div>
+            <div>
+                
             </div>
             <div class="ethereum">
                 <input v-model="ethereum" placeholder="Ethereum Account">
             </div>
-            <div v-if="this.picked === 'Seller'">
+            <div v-if="this.picked === 'Customer'">
+                <input v-model="companyName" placeholder="Company Name">
                 <textarea v-model="address" placeholder="Address"></textarea>
             </div>
             <button type="submit">Save</button>
@@ -29,6 +33,7 @@ import firebase from "firebase"
             return {
                 user: null,
                 name: "",
+                companyName: "",
                 ethereum: "", 
                 address: "",
                 picked: "Seller",
@@ -42,16 +47,18 @@ import firebase from "firebase"
             async pressed(){
                 var userID = firebase.auth().currentUser.uid;
                 let ref;
-                if(this.picked === 'Transporter'){
+                if(this.picked === 'Administrator'){
                     ref = firebase.database().ref('/transporters/' + userID);
                     ref.set({
                         'Ethereum Account': this.ethereum
                     });
-                }else if(this.picked === 'Seller'){
+                }else if(this.picked === 'Customer'){
                     ref = firebase.database().ref('/sellers/' + userID);
                     ref.set({
-                        'Ethereum Account': this.ethereum,
+                        'Company': this.companyName,
+                        'EthereumAccount': this.ethereum,
                         'Address': this.address
+
                     });
                 }
                 this.$router.replace({name: "Dashboard"});

@@ -33,12 +33,18 @@ export default {
 };*/
 
 import firebase from 'firebase';
-import web3 from '../../contracts/web3-metamask';
+//import web3 from '../../contracts/web3-metamask';
 import delivery from '../../contracts/DeliveryInstance';
 import deliveries from '../../contracts/DeliveriesInstance';
-
+import { mapGetters } from "vuex";
 
     export default {
+      computed: {
+            // map `this.user` to `this.$store.getters.user`
+            ...mapGetters({
+                user: "user"
+            })
+        },
         data() {
             return {
                 user: null,
@@ -79,9 +85,9 @@ import deliveries from '../../contracts/DeliveriesInstance';
         },
         methods: {
           async createDelivery(){
-              //this.$router.replace({name: "newDelivery"});
+              this.$router.replace({name: "createDelivery"});
 
-              web3.eth.getAccounts().then((accounts) => {
+              /*web3.eth.getAccounts().then((accounts) => {
                 return deliveries.methods.createDelivery('0x10863742Fd543f441325588c35f81517ef08A7f9', '0xd86Fdd7BC008dA187c9e52934f975ABbc9d492fd')
                 .send({from: accounts[0]});
               }).then(() => {
@@ -98,7 +104,7 @@ import deliveries from '../../contracts/DeliveriesInstance';
                 console.log(status);
               }).catch((err) => {
                  console.log(err);
-              });
+              });*/
             },
             async getAllDeliveries(){
               var allDeliveries = await deliveries.methods.returnAllDeliveries().call();
