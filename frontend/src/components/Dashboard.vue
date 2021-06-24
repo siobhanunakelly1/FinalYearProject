@@ -6,123 +6,82 @@
           <div class ="card-head">
             <button @click="createDelivery">Create</button>
           </div>
-          <div class="card-body">          
-            <div class="list">
-              <ul id="example-1">
-                <li v-for="item in list" :key="item">
-                  <b>Contract Address:</b> {{ item.address  }} <b>Status: </b>{{item.status}}
-                  <br>
-                </li>
-              </ul>
-            </div>  
+          <div class="card-body"> 
+            <ul id="example-1">
+              Deliveries
+              <li v-for="item in deliveries" :key="item.EthAddress">
+                Delivery {{ item }}
+              </li>
+            </ul>         
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 <script>
-/*import { mapGetters } from "vuex";
-export default {
-  computed: {
-    // map `this.user` to `this.$store.getters.user`
-    ...mapGetters({
-      user: "user"
-    })
-  }
-};*/
+
 
 import firebase from 'firebase';
 //import web3 from '../../contracts/web3-metamask';
 import delivery from '../../contracts/DeliveryInstance';
-import deliveries from '../../contracts/DeliveriesInstance';
+//import deliveries from '../../contracts/DeliveriesInstance';
 import { mapGetters } from "vuex";
 
-    export default {
-      computed: {
-            // map `this.user` to `this.$store.getters.user`
-            ...mapGetters({
-                user: "user"
-            })
-        },
-        data() {
-            return {
-                user: null,
-                deliveryAddress: '',
-                deliveries: '',
-                listDeliveries: '',
-                list: [
+let deliveriesRef;
+let contractList = [];
 
-                ],
-                template: `
-                <div class = "hello">
-                  <div class="card1">
-                    <div class="card-body">
-                      <span>Number:</span> #:number#<br>
-                      <span>Collection Address:</span> #:coll#<br>
-                      <span>Delivery Address:</span> #:dest#<br>
-                      
-                    </div>
-                  </div>
-                </div>
-
-                  `,
-
-              }
-            
-        },
-        created(){
-        this.getAllDeliveries();
-        firebase.default.auth().onAuthStateChanged(user => {
-          console.log(user);
-          if (user) {
-                this.user = user;
-                
-             } else {
-                this.user = null;
-                }
-              }); 
-        },
-        methods: {
-          async createDelivery(){
-              this.$router.replace({name: "createDelivery"});
-
-              /*web3.eth.getAccounts().then((accounts) => {
-                return deliveries.methods.createDelivery('0x10863742Fd543f441325588c35f81517ef08A7f9', '0xd86Fdd7BC008dA187c9e52934f975ABbc9d492fd')
-                .send({from: accounts[0]});
-              }).then(() => {
-                return deliveries.methods.returnAllDeliveries().call();
-              }).then((listDeliveries) => {
-                this.listDeliveries = listDeliveries;
-                const index = listDeliveries.length -1;
-                console.log(listDeliveries.length);
-                this.deliveryAddress = listDeliveries[index];
-                console.log(this.deliveryAddress);
-                const deliveryInstance = delivery(listDeliveries[index]);
-                return deliveryInstance.methods.status().call();
-              }).then((status) => {
-                console.log(status);
-              }).catch((err) => {
-                 console.log(err);
-              });*/
-            },
-            async getAllDeliveries(){
-              var allDeliveries = await deliveries.methods.returnAllDeliveries().call();
-              var i;
-              for(i = 0; i < allDeliveries.length; i++){
-                const deliveryInstance = delivery(allDeliveries[i]);
-                var status = await deliveryInstance.methods.status().call();
-                const deliveryView = {
-                  address: allDeliveries[i], status: status
-                }
-                this.list.push(deliveryView);
-              }
-              
-            }
-            
-          }  
+export default {
+  created() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.getAllContractAddresses(user);
+        this.getDeliveryDetails();
+      }
+    });   
+  },
+  computed: {
+    // map `this.user` to `this.$store.getters.user`
+    ...mapGetters({
+        user: "user"
+    })
+  },
+  data() {
+    return {
+        deliveries: contractList
+    }
+  },
+  methods: {
+    async createDelivery(){
+        this.$router.replace({name: "createDelivery"});
+      },
+    async getAllContractAddresses(user){
+      var uid = user.uid;
+      deliveriesRef = firebase.database().ref("/sellers/" + uid + "/Deliveries");
+      deliveriesRef.once('value', function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            var data = childSnapshot.val();
+            contractList.push(data.EthereumAddress); 
+        });
         
-    };
+      });
+      console.log(contractList[0]);
+      const deliveryInstance = await delivery("0xf9Df6589129A3fa14ce56A9B1b42806899dE528c");
+      const status = await deliveryInstance.methods.status().call();
+      console.log(status);
+    },
+    async getDeliveryDetails(){
+      var i;
+      console.log(contractList.length);
+      for(i =0; i < contractList.length; i++){
+        const deliveryInstance = delivery(contractList[i]);
+        console.log(deliveryInstance.methods.status().call());
+        console.log(contractList[i]);
+      }
+    }
+  }  
+};
         
 </script>
 

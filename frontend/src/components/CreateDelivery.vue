@@ -1,15 +1,16 @@
 <template>
     <div>
         <div v-if="error" class="error">{{error.message}}</div>
+        <form @submit.prevent="pressed">
             New Delivery
             <div class="description">
-                <input v-model="description" placeholder="Description">
+                <input v-model= "description" placeholder="Description">
             </div>
             <div>
-                <input v-model="reciever" placeholder="Reciever">
+                <input v-model= "recieverName" placeholder="Reciever">
             </div>
-            <button @click="createDelivery">Create</button>
-        
+            <button type = "submit">Create</button>
+        </form>
     </div>
 </template>
 
@@ -25,30 +26,54 @@ export default {
           return {
             user: null,
             description: '',
+            recieverName: '',
+            //sender: '',
             error: ''
           }
         },
         methods:{
-            async getSenderAccount(){
+            async getCurrentUser(){
                 firebase.default.auth().onAuthStateChanged(user => {
-                    let uid = user.uid;
-                    let dbRef = "sellers/"+uid;
-                    firebase.database().ref(dbRef).once("value", snap => {
-                    this.sender = snap.val().EthereumAccount;
-                })
-
+                    this.user = user;
                 });
+            },
+            async getSenderAccount(){
+                await this.getCurrentUser();
+                let senderAccount;
+                this.senderUid = this.user.uid;
+                var dbRef = firebase.database().ref("/sellers/"+this.senderUid);
+                await dbRef.once("value", snap => {
+                    senderAccount = snap.val().EthereumAccount;
+                    });
+                this.sender = senderAccount;
                 
             },
             async getRecieverAccount(){
-                    
-                
+                var name = this.recieverName;
+                let account;
+                let uid;
+                var sellersRef = firebase.database().ref("/sellers");
+                await sellersRef.once('value', function(snapshot) {
+                    snapshot.forEach(function(childSnapshot) {
+                        
+                        var data = childSnapshot.val();
+                        if(data.Company == name){
+                            account = data.EthereumAccount;
+                            uid = childSnapshot.key;
+                        }
+                    });
+                });
+                this.reciever = account;
+                this.recieverUid = uid;
+                console.log("Reciever UID " + this.recieverUid);
             },
-            async createDelivery(){
-                
-              this.getSenderAccount().then(() => {
-                deliveries.methods.createDelivery('0x10863742Fd543f441325588c35f81517ef08A7f9', this.reciever)
-                .send({from: this.sender});
+            async pressed(){
+                await this.getRecieverAccount();
+                await this.getSenderAccount();
+                console.log("Sender" +this.sender);
+                console.log("Reciever" +this.reciever);
+                deliveries.methods.createDelivery('0xc3BE006B92551968050247e3d021FC639505b6Ad', this.reciever)
+                .send({from: this.sender
               }).then(() => {
                 return deliveries.methods.returnAllDeliveries().call();
               }).then((listDeliveries) => {
@@ -60,19 +85,26 @@ export default {
                 const deliveryInstance = delivery(listDeliveries[index]);
                 return deliveryInstance.methods.status().call();
               }).then((status) => {
+                var senderRef = firebase.database().ref('/sellers/' + this.senderUid + '/Deliveries');
+                senderRef.push({
+                        'EthereumAddress': this.deliveryAddress
+
+                    });
+                var recieverRef = firebase.database().ref('/sellers/' + this.recieverUid + '/Deliveries');
+                recieverRef.push({
+                        'EthereumAddress': this.deliveryAddress
+                    });
                 console.log(status);
+                console.log("Sender" + this.sender);
+                console.log("Reciever" + this.reciever);
               }).catch((err) => {
                  console.log(err);
               });
             },
-            
             created(){
                 firebase.default.auth().onAuthStateChanged(user => {
                     this.user = user;
-
                 });
-
-
             },
         }
 }
