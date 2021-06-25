@@ -4,19 +4,14 @@ import 'mutationobserver-shim'
 
 
 import Vue from 'vue'
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import App from "./App.vue"
 import firebase from "firebase"
 import router from './routes'
 import store from './store'
 import axios from 'axios'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import vuetify from './plugins/vuetify'
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
-// Make BootstrapVue available throughout your project
-Vue.use(BootstrapVue)
-// Optionally install the BootstrapVue icon components plugin
-Vue.use(IconsPlugin)
 
 Vue.prototype.$axios = axios;
 
@@ -41,5 +36,6 @@ firebase.auth().onAuthStateChanged(user => {
 new Vue({
   router,
   store,
+  vuetify,
   render: h => h(App)
 }).$mount("#app");

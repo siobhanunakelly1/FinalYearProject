@@ -1,11 +1,16 @@
 <template>
-    <div>
-        <div v-if="loggedIn"> {{ name }} Logged in </div>
-        <span v-else>Not logged in</span>
-        <div>
-            <button @click="signOut">Sign Out</button>
-        </div>
-    </div>
+    <nav>
+        <v-toolbar app>
+            <v-toolbar-title class="text-uppercase grey--text">
+                <span>Transporter</span>
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn depressed color="white" class="text-uppercase grey--text" @click="signOut">
+                <span>Sign Out</span>
+                <v-icon right>exit_to_app</v-icon>
+            </v-btn>
+        </v-toolbar>
+    </nav>
 </template>
 
 <script>

@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import CreateDelivery from '../components/CreateDelivery'
-//import HelloWorld from '../components/HelloWord'
 import Login from '../components/Login'
 import Dashboard from '../components/Dashboard'
 import Register from '../components/Register'
