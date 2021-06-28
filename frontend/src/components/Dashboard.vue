@@ -1,22 +1,45 @@
 <template>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div class="card">
-          <div class ="card-head">
-            <button @click="createDelivery">Create</button>
-          </div>
-          <div class="card-body"> 
-            <ul id="example-1">
-              Deliveries
-              <li v-for="item in deliveries" :key="item.EthAddress">
-                Delivery {{ item }}
-              </li>
-            </ul>         
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="dashboard">
+    
+    <v-container class = "my-5">
+      <h1 class="subheading grey--text">
+        <span class="font-weight-light">Dashboard</span>
+      </h1>
+      <v-divider></v-divider>
+      <v-layout row class="mb-3 mt-3"> 
+        <v-btn small text color="grey" @click="sortBy('number')">
+          <v-icon left small>sort</v-icon>
+          <span class="caption">By number</span>
+        </v-btn>
+        <v-btn small text color="grey" @click="sortBy('status')">
+          <v-icon left small>sort</v-icon>
+          <span class="caption">By status</span>
+        </v-btn>
+      </v-layout>
+    
+      <v-card flat class="pa-3" v-for="job in deliveries" :key="job.number">
+        <v-layout row :class="`pa-3 job ${job.status}`">
+          <v-flex xs12 md6>
+            <div class="caption grey--text">Job Number</div>
+            <div>{{ job.number }}</div>
+          </v-flex>
+          <v-flex xs6 sm4 md2>
+            <div class="caption grey--text">Collection From</div>
+            <div> {{ job.collect }}</div>
+          </v-flex>
+          <v-flex xs6 sm4 md2>
+            <div class="caption grey--text">Deliver To</div>
+            <div> {{ job.deliver }}</div>
+          </v-flex>
+          <v-spacer></v-spacer>
+          <v-flex xs2 sm4 md2>
+            <v-spacer></v-spacer>
+            <v-chip small :class="`${job.status} white--text my-2 caption`">{{ job.status }}</v-chip>
+          </v-flex>
+        </v-layout>
+        <v-divider></v-divider>
+      </v-card>
+    </v-container>
   </div>
 </template>
 
@@ -49,7 +72,12 @@ export default {
   },
   data() {
     return {
-        deliveries: contractList
+        deliveries:[
+          { number: "123", collect: "Murray Timber", deliver: "Laois Sawmills", status: "Collected"},
+          { number: "124", collect: "Coca Cola", deliver: "Ballygowan", status: "Pending"},
+          { number: "125", collect: "Kildea", deliver: "Burren", status: "Collected"},
+          { number: "126", collect: "Electrosteel", deliver: "Peak Pipe", status: "Delivered"},
+        ]
     }
   },
   methods: {
@@ -79,6 +107,9 @@ export default {
         console.log(deliveryInstance.methods.status().call());
         console.log(contractList[i]);
       }
+    },
+    sortBy(prop){
+      this.deliveries.sort((a,b) => a[prop] < b[prop] ? -1 : 1)
     }
   }  
 };
@@ -86,59 +117,26 @@ export default {
 </script>
 
 <style>
-#app {
-  width: 95%;
-  min-width: 360px;
-  margin: 0 auto;
-  font-family: 'helvetica';
+
+.job.Delivered{
+  border-left: 4px solid #3CD1C2;
+}
+.job.Collected{
+  border-left: 4px solid yellow;
+}
+.job.Pending{
+  border-left: 4px solid orange;
 }
 
-.k-listview {
- 
- background: #7bd3cc;
- 
-
+.v-chip.v-chip--no-color.theme--light.Delivered {
+  background: #3CD1C2;
 }
-
-.buttons {
-  margin-left: 3%;
-  margin-right: 80%;
-  display: inline-block;
+.v-chip.v-chip--no-color.theme--light.Collected{
+  background: yellow;
 }
-
-
-.card1 {
-  background: #fff;
-  font-size: 16px;
-  width: 85%;
-  min-width: 286px;
-  margin: 2em auto;
-  padding: 1.25em;
-  border-radius: 4px;
-  box-shadow: 0 3px 1px -2px rgba(0,0,0,0.2), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);
+.v-chip.v-chip--no-color.theme--light.Pending{
+  background: orange;
 }
-
-.card {
-  background: #fff;
-  width: 85%;
-  min-width: 286px;
-  margin: 2em auto;
-  padding: 1.25em;
-  border-radius: 4px;
-  box-shadow: 0 3px 1px -2px rgba(0,0,0,0.2), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);
-}
-
-.card-body span {
-  width: 300px;
-  display: inline-block;
-  font-weight: bold;
-}
-
-li {
-  margin: 0 0 3px 0;
-  font-size: 14px;
-}
-
 
 </style>
 

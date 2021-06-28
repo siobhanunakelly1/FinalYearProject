@@ -1,15 +1,15 @@
 <template>
     <nav>
-        <v-toolbar app>
+        <v-app-bar app>
             <v-toolbar-title class="text-uppercase grey--text">
                 <span>Transporter</span>
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn depressed color="white" class="text-uppercase grey--text" @click="signOut">
+            <v-btn text color="grey">
                 <span>Sign Out</span>
                 <v-icon right>exit_to_app</v-icon>
             </v-btn>
-        </v-toolbar>
+        </v-app-bar>
     </nav>
 </template>
 
