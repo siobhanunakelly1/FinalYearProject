@@ -49,13 +49,24 @@
 import firebase from 'firebase';
 //import web3 from '../../contracts/web3-metamask';
 import delivery from '../../contracts/DeliveryInstance';
-//import deliveries from '../../contracts/DeliveriesInstance';
+import deliveries from '../../contracts/DeliveriesInstance';
 import { mapGetters } from "vuex";
 
 let deliveriesRef;
 let contractList = [];
 
 export default {
+  async beforeMount() {
+  // get auctionBox method: returnAllAuctions()
+  deliveries.methods
+    .returnAllDeliveries()
+    .call()
+    .then((auctions) => {
+      console.log(auctions);
+      this.getDeets(auctions);
+    });
+
+},
   created() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
@@ -110,6 +121,15 @@ export default {
     },
     sortBy(prop){
       this.deliveries.sort((a,b) => a[prop] < b[prop] ? -1 : 1)
+    },
+    async getDeets(prop){
+      for (let x of prop){
+        const deliveryInstance = await delivery(x);
+        const status = await deliveryInstance.methods.status().call();
+        const id = await deliveryInstance.methods.id().call();
+        const desc = await deliveryInstance.methods.description().call();
+        console.log(status, id, desc);
+      }
     }
   }  
 };

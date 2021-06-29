@@ -5,7 +5,7 @@
                 <span>Transporter</span>
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn text color="grey">
+            <v-btn text color="grey" @click="signOut">
                 <span>Sign Out</span>
                 <v-icon right>exit_to_app</v-icon>
             </v-btn>

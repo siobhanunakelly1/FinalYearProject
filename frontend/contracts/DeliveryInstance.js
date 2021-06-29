@@ -1,6 +1,6 @@
 import web3 from './web3-metamask';
 
-const abi = [
+const abi =[
 	{
 		"inputs": [
 			{
@@ -17,6 +17,16 @@ const abi = [
 				"internalType": "address",
 				"name": "aBuyer",
 				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "desc",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "anID",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "nonpayable",
@@ -40,6 +50,32 @@ const abi = [
 		"name": "collected",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "description",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "id",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
