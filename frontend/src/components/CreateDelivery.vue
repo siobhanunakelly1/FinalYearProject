@@ -1,17 +1,23 @@
 <template>
-    <div>
-        <div v-if="error" class="error">{{error.message}}</div>
-        <form @submit.prevent="pressed">
-            New Delivery
-            <div class="description">
-                <input v-model= "description" placeholder="Description">
-            </div>
-            <div>
-                <input v-model= "recieverName" placeholder="Reciever">
-            </div>
-            <button type = "submit">Create</button>
-        </form>
-    </div>
+  <v-dialog width ="600px">
+      <template v-slot:activator="{ on }">
+      <v-btn  v-on="on" small text color="grey">
+          <v-icon left small>add</v-icon>
+          <span class="caption">New Delivery</span>
+      </v-btn>
+      </template>
+      <v-card>
+          <v-card-title>
+              <h2>Create New Delivery</h2>
+          </v-card-title>
+          <v-card-text>
+              <v-form class="px-3">
+                  <v-text-field label="Description" outlined v-model="description"></v-text-field>
+                  <v-combobox outlined label = "Deliver to"></v-combobox>
+              </v-form>
+          </v-card-text>
+      </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -27,10 +33,10 @@ export default {
             user: null,
             description: '',
             recieverName: '',
-            //sender: '',
             error: ''
           }
         },
+        
         methods:{
             async getCurrentUser(){
                 firebase.default.auth().onAuthStateChanged(user => {
@@ -112,19 +118,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.error {
-    color: red;
-    font-size: 18px;
-}
-input {
-    width: 400px;
-    padding: 30px;
-    margin: 20px;
-    font-size: 21px;
-}
-button {
-    width: 400px;
-    height: 75px;
-    font-size: 100%;
-}
+
 </style>

@@ -15,8 +15,10 @@
           <v-icon left small>sort</v-icon>
           <span class="caption">By status</span>
         </v-btn>
+        <v-spacer></v-spacer>
+        <CreateDelivery/>
       </v-layout>
-    
+
       <v-card flat class="pa-3" v-for="job in deliveries" :key="job.number">
         <v-layout row :class="`pa-3 job ${job.status}`">
           <v-flex xs12 md6>
@@ -51,11 +53,13 @@ import firebase from 'firebase';
 import delivery from '../../contracts/DeliveryInstance';
 import deliveries from '../../contracts/DeliveriesInstance';
 import { mapGetters } from "vuex";
+import CreateDelivery from './CreateDelivery'
 
 let deliveriesRef;
 let contractList = [];
 
 export default {
+  components: { CreateDelivery },
   async beforeMount() {
   // get auctionBox method: returnAllAuctions()
   deliveries.methods
