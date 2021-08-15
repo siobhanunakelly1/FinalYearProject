@@ -1,6 +1,6 @@
 <template>
     <nav>
-        <v-app-bar app>
+        <v-app-bar app color="#E8EAF6">
             <v-toolbar-title class="text-uppercase grey--text">
                 <span>Transporter</span>
             </v-toolbar-title>
@@ -35,8 +35,7 @@ import firebase from "firebase"
         firebase.default.auth().onAuthStateChanged(user => {
           if (user) {
                 this.loggedIn = true
-                this.name = user.displayName;
-                console.log(this.name);
+                console.log(user.email);
              } else {
                 this.loggedIn = false
                 }

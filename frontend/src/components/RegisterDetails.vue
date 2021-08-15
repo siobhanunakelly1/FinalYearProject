@@ -1,26 +1,30 @@
 <template>
     <div>
-        <div v-if="error" class="error">{{error.message}}</div>
-        <form @submit.prevent="pressed">
-            Enter Your Details {{user.displayName}}
-            <div>
-                <input type="radio" id="customer" value="Customer" v-model="picked">
-                <label for="customer">Customer</label>
-                <input type="radio" id="admin" value="Administrator" v-model="picked">
-                <label for="admin">Administrator</label>
-            </div>
-            <div>
-                
-            </div>
-            <div class="ethereum">
-                <input v-model="ethereum" placeholder="Ethereum Account">
-            </div>
-            <div v-if="this.picked === 'Customer'">
-                <input v-model="companyName" placeholder="Company Name">
-                <textarea v-model="address" placeholder="Address"></textarea>
-            </div>
-            <button type="submit">Save</button>
-        </form>
+        <v-card class="mx-auto my-15 pa-10" max-width="500" elevation = 5>
+            <v-card-title class="text-uppercase grey--text">
+                Company Details
+            </v-card-title>
+            <v-card-text>
+                <div v-if="error" class="error">{{error.message}}</div>
+                <v-form  class="px-3">
+                    <v-text-field label = "Company Name" v-model="companyName" outlined></v-text-field>
+                    <v-text-field label = "Address" v-model="address" outlined></v-text-field>
+                    <v-text-field label = "Ethereum Account" v-model="ethereum" outlined>
+                        <template v-slot:append>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{ on }">
+                                <v-icon v-on="on">
+                                    mdi-help-circle-outline
+                                </v-icon>
+                                </template>
+                                You must have an Ethereum Wallet to register for this service.
+                            </v-tooltip>
+                            </template>
+                    </v-text-field>
+                    <v-btn class = "mt-3" elevation="2" @click="pressed">Submit</v-btn>
+                </v-form>
+            </v-card-text>
+        </v-card>
     </div>
 </template>
 
