@@ -16,7 +16,7 @@
           <span class="caption">By status</span>
         </v-btn>
         <v-spacer></v-spacer>
-        <CreateDelivery/>
+        <BookDelivery/>
       </v-layout>
 
       <v-card flat class="pa-3" v-for="job in deliveries" :key="job.number">
@@ -53,13 +53,14 @@ import firebase from 'firebase';
 import delivery from '../../contracts/DeliveryInstance';
 import deliveries from '../../contracts/DeliveriesInstance';
 import { mapGetters } from "vuex";
-import CreateDelivery from './CreateDelivery'
+import BookDelivery from './BookDelivery.vue'
+//import CreateDelivery from './CreateDelivery'
 
 let deliveriesRef;
 let contractList = [];
 
 export default {
-  components: { CreateDelivery },
+  components: { BookDelivery },
   async beforeMount() {
   // get auctionBox method: returnAllAuctions()
   deliveries.methods

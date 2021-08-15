@@ -1,17 +1,19 @@
 <template>
     <div>
-        Login
-        <form @submit.prevent="pressed">
-            <div class = "login">
-                <input type = "email" placeholder="login" v-model = "email">
-            </div>
-            <div class="password">
-                <input type = "password" v-model="password" placeholder="password">
-            </div>
-            <button>Log In</button>
-        </form>
-        <div class = "error" v-if="error">{{error.message}}</div>
-        <span>Need an account? Click here to <router-link to="/register">register</router-link></span>
+        <v-card class="mx-auto my-15 pa-10" max-width="500" elevation = 5>
+            <v-card-title class="text-uppercase grey--text">
+                Login
+            </v-card-title>
+            <v-card-text>
+                <div v-if="error" class="error">{{error.message}}</div>
+                <v-form  class="px-3">
+                    <v-text-field label = "Email" v-model="email" prepend-icon="email"></v-text-field>
+                    <v-text-field label = "Password" v-model="password" prepend-icon="lock"></v-text-field>
+                    <v-btn class = "mt-3" elevation="2" @click="pressed">Login</v-btn>
+                    <div class="mt-5">Need an account? Click here to <router-link to="/register">register</router-link></div>
+                </v-form>
+            </v-card-text>
+        </v-card>
     </div>
 </template>
 
@@ -44,16 +46,5 @@ import * as firebase from "firebase/app";
 .error {
     color: red;
     font-size: 18px;
-}
-input {
-    width: 400px;
-    padding: 30px;
-    margin: 20px;
-    font-size: 21px;
-}
-button {
-    width: 400px;
-    height: 75px;
-    font-size: 100%;
 }
 </style>
