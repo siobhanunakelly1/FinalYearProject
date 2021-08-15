@@ -1,8 +1,5 @@
 
 import 'mutationobserver-shim'
-
-
-
 import Vue from 'vue'
 import App from "./App.vue"
 import firebase from "firebase"
@@ -11,7 +8,24 @@ import store from './store'
 import axios from 'axios'
 import vuetify from './plugins/vuetify'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import * as VueGoogleMaps from 'vue2-google-maps'
+import VuetifyGoogleAutocomplete from 'vuetify-google-autocomplete'
 
+Vue.use(VueGoogleMaps, {
+  load: {
+      key: 'AIzaSyCHCDp1V4GwXsIow7He_Am_DAJqc2a-Svk',
+      // This is required to use the Autocomplete plugin
+      libraries: 'places', // 'places,drawing,visualization'
+  },
+});
+
+Vue.use(VuetifyGoogleAutocomplete, {
+  /*
+    not used as loaded with component
+    apiKey: key,
+  */
+  vueGoogleMapsCompatibility: true,
+});
 
 Vue.prototype.$axios = axios;
 

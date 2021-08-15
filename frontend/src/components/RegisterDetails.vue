@@ -8,7 +8,15 @@
                 <div v-if="error" class="error">{{error.message}}</div>
                 <v-form  class="px-3">
                     <v-text-field label = "Company Name" v-model="companyName" outlined></v-text-field>
-                    <v-text-field label = "Address" v-model="address" outlined></v-text-field>
+                    <vuetify-google-autocomplete
+                        ref="address"
+                        id="map"
+                        classname="form-control"
+                        placeholder="Please type your address"
+                        v-on:placechanged="getAddressData"
+                        outlined
+                    >
+                    </vuetify-google-autocomplete>
                     <v-text-field label = "Ethereum Account" v-model="ethereum" outlined>
                         <template v-slot:append>
                             <v-tooltip bottom>
@@ -31,16 +39,13 @@
 <script>
 import firebase from "firebase"
 
-//import "firebase/auth";
     export default {
         data() {
             return {
                 user: null,
-                name: "",
                 companyName: "",
                 ethereum: "", 
                 address: "",
-                picked: "Seller",
                 error: ""
             }
         },
@@ -51,21 +56,17 @@ import firebase from "firebase"
             async pressed(){
                 var userID = firebase.auth().currentUser.uid;
                 let ref;
-                if(this.picked === 'Administrator'){
-                    ref = firebase.database().ref('/transporters/' + userID);
-                    ref.set({
-                        'Ethereum Account': this.ethereum
-                    });
-                }else if(this.picked === 'Customer'){
-                    ref = firebase.database().ref('/sellers/' + userID);
-                    ref.set({
-                        'Company': this.companyName,
-                        'EthereumAccount': this.ethereum,
-                        'Address': this.address
+                ref = firebase.database().ref('TransportCompany/Customers/' + userID);
+                ref.set({
+                    'Company': this.companyName,
+                    'EthereumAccount': this.ethereum,
+                    'Address': this.address
 
-                    });
-                }
+                });
                 this.$router.replace({name: "Dashboard"});
+            },
+            getAddressData: function (addressData) {
+                this.address = addressData;
             }
         }   
     }
