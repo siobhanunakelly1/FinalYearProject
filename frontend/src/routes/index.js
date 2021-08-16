@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import CreateDelivery from '../components/CreateDelivery'
+import BookDelivery from '../components/BookDelivery'
 import Login from '../components/Login'
 import Dashboard from '../components/Dashboard'
 import Register from '../components/Register'
@@ -33,9 +33,9 @@ const router = new Router({
         component: RegisterDetails
     },
     {
-        path: '/createDelivery',
-        name: 'createDelivery',
-        component: CreateDelivery
+        path: '/bookDelivery',
+        name: 'bookDelivery',
+        component: BookDelivery
     }
 ]
 });

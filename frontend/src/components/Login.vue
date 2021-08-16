@@ -8,7 +8,14 @@
                 <div v-if="error" class="error">{{error.message}}</div>
                 <v-form  class="px-3">
                     <v-text-field label = "Email" v-model="email" prepend-icon="email"></v-text-field>
-                    <v-text-field label = "Password" v-model="password" prepend-icon="lock"></v-text-field>
+                    <v-text-field 
+                        label = "Password" 
+                        v-model="password" 
+                        prepend-icon="lock"
+                        :type="show ?'text': 
+                        'password'"
+                        :append-icon="show ?'mdi-eye':'mdi-eye-off'"   
+                        @click:append="show=!show"></v-text-field>
                     <v-btn class = "mt-3" elevation="2" @click="pressed">Login</v-btn>
                     <div class="mt-5">Need an account? Click here to <router-link to="/register">register</router-link></div>
                 </v-form>
@@ -24,7 +31,8 @@ import * as firebase from "firebase/app";
             return{
                 email: '',
                 password: '',
-                error: ''
+                error: '',
+                show: false
             }
         },
         methods: {

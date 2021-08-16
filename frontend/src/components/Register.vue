@@ -8,7 +8,14 @@
                 <div v-if="error" class="error">{{error.message}}</div>
                 <v-form  class="px-3">
                     <v-text-field label = "Email" v-model="email" prepend-icon="email"></v-text-field>
-                    <v-text-field label = "Password" v-model="password" prepend-icon="lock"></v-text-field>
+                    <v-text-field 
+                        label = "Password" 
+                        v-model="password" 
+                        prepend-icon="lock"
+                        :type="show ?'text': 
+                        'password'"
+                        :append-icon="show ?'mdi-eye':'mdi-eye-off'"   
+                        @click:append="show=!show"></v-text-field>
                     Register as:
                     <v-chip-group v-model = "selection" mandatory>
                         <v-chip>Admin</v-chip>
@@ -30,7 +37,8 @@ export default {
             email: "",
             password: "",
             selection: "",
-            error: ""
+            error: "",
+            show: false
         }
     },
     methods: {
