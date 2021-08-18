@@ -19,24 +19,28 @@
         <BookDelivery/>
       </v-layout>
 
-      <v-card flat class="pa-3" v-for="job in deliveries" :key="job.number">
-        <v-layout row :class="`pa-3 job ${job.status}`">
+      <v-card flat class="pa-3" v-for="job in jobs" :key="job.number">
+        <v-layout row :class="`pa-3 job ${job.Status}`">
           <v-flex xs12 md6>
             <div class="caption grey--text">Job Number</div>
-            <div>{{ job.number }}</div>
+            <div>1</div>
+          </v-flex>
+          <v-flex xs6 sm4 md2>
+            <div class="caption grey--text">Description</div>
+            <div> {{ job.Description }}</div>
           </v-flex>
           <v-flex xs6 sm4 md2>
             <div class="caption grey--text">Collection From</div>
-            <div> {{ job.collect }}</div>
+            <div> {{ job.Sender }}</div>
           </v-flex>
           <v-flex xs6 sm4 md2>
             <div class="caption grey--text">Deliver To</div>
-            <div> {{ job.deliver }}</div>
+            <div> {{ job.Buyer }}</div>
           </v-flex>
           <v-spacer></v-spacer>
           <v-flex xs2 sm4 md2>
             <v-spacer></v-spacer>
-            <v-chip small :class="`${job.status} white--text my-2 caption`">{{ job.status }}</v-chip>
+            <v-chip small :class="`${job.Status} white--text my-2 caption`">{{ job.Status }}</v-chip>
           </v-flex>
         </v-layout>
         <v-divider></v-divider>
@@ -49,94 +53,76 @@
 
 
 import firebase from 'firebase';
-//import web3 from '../../contracts/web3-metamask';
 import delivery from '../../contracts/DeliveryInstance';
 import deliveries from '../../contracts/DeliveriesInstance';
-import { mapGetters } from "vuex";
 import BookDelivery from './BookDelivery.vue'
-//import CreateDelivery from './CreateDelivery'
 
-let deliveriesRef;
-let contractList = [];
 
 export default {
   components: { BookDelivery },
-  async beforeMount() {
-  // get auctionBox method: returnAllAuctions()
-  deliveries.methods
-    .returnAllDeliveries()
-    .call()
-    .then((auctions) => {
-      console.log(auctions);
-      this.getDeets(auctions);
-    });
-
-},
-  created() {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.getAllContractAddresses(user);
-        this.getDeliveryDetails();
-      }
-    });   
-  },
-  computed: {
-    // map `this.user` to `this.$store.getters.user`
-    ...mapGetters({
-        user: "user"
-    })
-  },
   data() {
     return {
-        deliveries:[
-          { number: "123", collect: "Murray Timber", deliver: "Laois Sawmills", status: "Collected"},
-          { number: "124", collect: "Coca Cola", deliver: "Ballygowan", status: "Pending"},
-          { number: "125", collect: "Kildea", deliver: "Burren", status: "Collected"},
-          { number: "126", collect: "Electrosteel", deliver: "Peak Pipe", status: "Delivered"},
-        ]
+      user: '',
+      deliveryInstances: [],
+      jobs: [],
+      deliveries: ''
     }
   },
+  mounted() {
+    firebase.default.auth().onAuthStateChanged(user => {
+        this.user = user;
+    });
+    this.getAllDeliveryInstances().then(() => {
+      this.getDeliveryDetails();
+    });
+  },
   methods: {
-    async createDelivery(){
-        this.$router.replace({name: "createDelivery"});
-      },
-    async getAllContractAddresses(user){
-      var uid = user.uid;
-      deliveriesRef = firebase.database().ref("/sellers/" + uid + "/Deliveries");
-      deliveriesRef.once('value', function(snapshot) {
-        snapshot.forEach(function(childSnapshot) {
-            var data = childSnapshot.val();
-            contractList.push(data.EthereumAddress); 
-        });
-        
-      });
-      console.log(contractList[0]);
-      const deliveryInstance = await delivery("0xf9Df6589129A3fa14ce56A9B1b42806899dE528c");
-      const status = await deliveryInstance.methods.status().call();
-      console.log(status);
+    async getAllDeliveryInstances(){
+      var contractAddresses = await deliveries.methods.returnAllDeliveries().call();
+      let i;
+      for (i = 0; i < contractAddresses.length; i++) {
+        var delInst = await delivery(contractAddresses[i]);
+        this.deliveryInstances.push(delInst);
+      }
     },
     async getDeliveryDetails(){
-      var i;
-      console.log(contractList.length);
-      for(i =0; i < contractList.length; i++){
-        const deliveryInstance = delivery(contractList[i]);
-        console.log(deliveryInstance.methods.status().call());
-        console.log(contractList[i]);
-      }
-    },
-    sortBy(prop){
-      this.deliveries.sort((a,b) => a[prop] < b[prop] ? -1 : 1)
-    },
-    async getDeets(prop){
-      for (let x of prop){
-        const deliveryInstance = await delivery(x);
-        const status = await deliveryInstance.methods.status().call();
-        const id = await deliveryInstance.methods.id().call();
-        const desc = await deliveryInstance.methods.description().call();
-        console.log(status, id, desc);
+      var dbRef = firebase.database().ref('TransportCompany/Customers');
+      var sender;
+      var buyer;
+      let i;
+      for (i = 0; i < this.deliveryInstances.length; i++) {
+        var senderEth = await this.deliveryInstances[i].methods.seller().call();
+        var buyerEth = await this.deliveryInstances[i].methods.buyer().call();
+        
+        dbRef.once('value', (snapshot) => {
+          snapshot.forEach((childSnapshot) => {
+            var childData = childSnapshot.val();
+            if(childData.EthereumAccount === senderEth){
+              console.log(childData.Company);
+              sender = childData;
+            }
+
+            if(childData.EthereumAccount === buyerEth){
+              console.log(childData.Company);
+              buyer = childData;
+            }
+          });
+        });
+
+        
+        var description = await this.deliveryInstances[i].methods.description().call();
+        var status = await this.deliveryInstances[i].methods.status().call();
+        this.jobs.push({
+          'Sender': sender,
+          'Buyer': buyer,
+          'Description': description,
+          'Status': status
+        });
+
       }
     }
-  }  
+  }
+  
 };
         
 </script>
@@ -149,7 +135,7 @@ export default {
 .job.Collected{
   border-left: 4px solid yellow;
 }
-.job.Pending{
+.job.Created{
   border-left: 4px solid orange;
 }
 
@@ -159,7 +145,7 @@ export default {
 .v-chip.v-chip--no-color.theme--light.Collected{
   background: yellow;
 }
-.v-chip.v-chip--no-color.theme--light.Pending{
+.v-chip.v-chip--no-color.theme--light.Created{
   background: orange;
 }
 
