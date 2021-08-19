@@ -1,6 +1,6 @@
 import web3 from './web3-metamask';
 
-const address = '0xC086b88c4AA31510b3e283743ED54239D04Be1E4'
+const address = '0x6CC2b6F5Dc4BdD44d2d7769Aa5CdeF49302839A3'
 
 
 const abi = [

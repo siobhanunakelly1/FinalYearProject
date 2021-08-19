@@ -21,26 +21,45 @@
 
       <v-card flat class="pa-3" v-for="job in jobs" :key="job.number">
         <v-layout row :class="`pa-3 job ${job.Status}`">
-          <v-flex xs12 md6>
-            <div class="caption grey--text">Job Number</div>
-            <div>1</div>
-          </v-flex>
           <v-flex xs6 sm4 md2>
             <div class="caption grey--text">Description</div>
             <div> {{ job.Description }}</div>
           </v-flex>
           <v-flex xs6 sm4 md2>
             <div class="caption grey--text">Collection From</div>
-            <div> {{ job.Sender }}</div>
+            <div> {{ job.Sender.Company }}</div>
           </v-flex>
           <v-flex xs6 sm4 md2>
             <div class="caption grey--text">Deliver To</div>
-            <div> {{ job.Buyer }}</div>
+            <div> {{ job.Buyer.Company }}</div>
           </v-flex>
           <v-spacer></v-spacer>
           <v-flex xs2 sm4 md2>
             <v-spacer></v-spacer>
             <v-chip small :class="`${job.Status} white--text my-2 caption`">{{ job.Status }}</v-chip>
+            <v-menu
+              top
+              :close-on-click="closeOnClick"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon 
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <v-icon small>more_vert</v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="(item, index) in menuItems"
+                  :key="index"
+                  @click="selectSection(item, job.ContractInstance)"
+                >
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </v-flex>
         </v-layout>
         <v-divider></v-divider>
@@ -65,10 +84,15 @@ export default {
       user: '',
       deliveryInstances: [],
       jobs: [],
-      deliveries: ''
+      deliveries: '',
+      menuItems: [
+        { title: 'Collected' },
+        { title: 'Delivered' }
+      ],
+      closeOnClick: true
     }
   },
-  mounted() {
+  beforeMount() {
     firebase.default.auth().onAuthStateChanged(user => {
         this.user = user;
     });
@@ -79,6 +103,7 @@ export default {
   methods: {
     async getAllDeliveryInstances(){
       var contractAddresses = await deliveries.methods.returnAllDeliveries().call();
+      console.log(contractAddresses);
       let i;
       for (i = 0; i < contractAddresses.length; i++) {
         var delInst = await delivery(contractAddresses[i]);
@@ -108,11 +133,11 @@ export default {
             }
           });
         });
-
         
         var description = await this.deliveryInstances[i].methods.description().call();
         var status = await this.deliveryInstances[i].methods.status().call();
         this.jobs.push({
+          'ContractInstance': this.deliveryInstances[i],
           'Sender': sender,
           'Buyer': buyer,
           'Description': description,
@@ -120,6 +145,22 @@ export default {
         });
 
       }
+    },
+    selectSection(item, instance) {
+      switch(item.title) {
+        case 'Collected':
+          this.collected(instance);
+          break
+        case 'Delivered':
+          console.log('Delivered')
+      }
+    },
+    async collected(instance) {
+      instance.methods.collected().send({
+        from: '0xe90a1BD2f2b82b540F1975eA288AFe0b47ed1884'
+      }).then(() => {
+        console.log("Delivery has been collected");
+      });
     }
   }
   
