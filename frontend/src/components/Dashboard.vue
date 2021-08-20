@@ -20,6 +20,7 @@
       </v-layout>
 
       <v-card flat class="pa-3" v-for="job in jobs" :key="job.number">
+        <div v-if="admin || job.SenderKey === user.uid || job.BuyerKey === user.uid">
         <v-layout row :class="`pa-3 job ${job.Status}`">
           <v-flex xs6 sm4 md2>
             <div class="caption grey--text">Description</div>
@@ -63,6 +64,7 @@
           </v-flex>
         </v-layout>
         <v-divider></v-divider>
+        </div>
       </v-card>
     </v-container>
   </div>
@@ -82,6 +84,7 @@ export default {
   data() {
     return {
       user: '',
+      userEth: '0xc3BE006B92551968050247e3d021FC639505b6Ad',
       deliveryInstances: [],
       jobs: [],
       deliveries: '',
@@ -89,7 +92,8 @@ export default {
         { title: 'Collected' },
         { title: 'Delivered' }
       ],
-      closeOnClick: true
+      closeOnClick: true,
+      admin: true
     }
   },
   beforeMount() {
@@ -99,11 +103,21 @@ export default {
     this.getAllDeliveryInstances().then(() => {
       this.getDeliveryDetails();
     });
+    var dbRef = firebase.database().ref('TransportCompany/Customers');
+    dbRef.once('value', (snapshot) => {
+          snapshot.forEach((childSnapshot) => {
+            var childKey = childSnapshot.key;
+            var childDate = childSnapshot.val();
+            if( childKey === this.user.uid){
+              this.admin = false;
+              this.userEth = childDate.EthereumAccount;
+            }
+          });
+        });
   },
   methods: {
     async getAllDeliveryInstances(){
       var contractAddresses = await deliveries.methods.returnAllDeliveries().call();
-      console.log(contractAddresses);
       let i;
       for (i = 0; i < contractAddresses.length; i++) {
         var delInst = await delivery(contractAddresses[i]);
@@ -114,6 +128,8 @@ export default {
       var dbRef = firebase.database().ref('TransportCompany/Customers');
       var sender;
       var buyer;
+      var senderKey;
+      var buyerKey;
       let i;
       for (i = 0; i < this.deliveryInstances.length; i++) {
         var senderEth = await this.deliveryInstances[i].methods.seller().call();
@@ -121,15 +137,16 @@ export default {
         
         dbRef.once('value', (snapshot) => {
           snapshot.forEach((childSnapshot) => {
+            var childKey = childSnapshot.key;
             var childData = childSnapshot.val();
             if(childData.EthereumAccount === senderEth){
-              console.log(childData.Company);
               sender = childData;
+              senderKey = childKey;
             }
 
             if(childData.EthereumAccount === buyerEth){
-              console.log(childData.Company);
               buyer = childData;
+              buyerKey = childKey;
             }
           });
         });
@@ -139,7 +156,9 @@ export default {
         this.jobs.push({
           'ContractInstance': this.deliveryInstances[i],
           'Sender': sender,
+          'SenderKey': senderKey,
           'Buyer': buyer,
+          'BuyerKey': buyerKey,
           'Description': description,
           'Status': status
         });
@@ -152,15 +171,23 @@ export default {
           this.collected(instance);
           break
         case 'Delivered':
-          console.log('Delivered')
+          this.delivered(instance);
       }
     },
     async collected(instance) {
       instance.methods.collected().send({
-        from: '0xe90a1BD2f2b82b540F1975eA288AFe0b47ed1884'
+        from: this.userEth
       }).then(() => {
         console.log("Delivery has been collected");
       });
+    },
+    async delivered(instance) {
+      instance.methods.received().send({
+        from: this.userEth
+      }).then(() => {
+        console.log("Delivery has been delivered");
+      });
+      
     }
   }
   
@@ -170,7 +197,7 @@ export default {
 
 <style>
 
-.job.Delivered{
+.job.Received{
   border-left: 4px solid #3CD1C2;
 }
 .job.Collected{
@@ -180,7 +207,7 @@ export default {
   border-left: 4px solid orange;
 }
 
-.v-chip.v-chip--no-color.theme--light.Delivered {
+.v-chip.v-chip--no-color.theme--light.Received {
   background: #3CD1C2;
 }
 .v-chip.v-chip--no-color.theme--light.Collected{
