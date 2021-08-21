@@ -21,9 +21,32 @@
                 item-text="comp"
                 >
               </v-combobox>
-              <v-btn class = "mt-3" elevation="2" @click="pressed">Book</v-btn>
+              Recipient not listed?
+              <v-btn color="primary" dark @click="dialog2 = !dialog2">Invite Them</v-btn>
           </v-card-text>
+          <v-card-actions>
+              <div class="text-xs-center">
+                <v-btn class = "mb-3 ml-3" elevation="2" @click="pressed">Book</v-btn>
+                <v-btn right absolute class = "mb-3 mr-3" elevation="2" @click="dialog = false">Close</v-btn>
+              </div>
+          </v-card-actions>
       </v-card>
+      <v-dialog v-model="dialog2" max-width="500px">
+              <v-card>
+                <v-card-title>
+                  <span>Invite</span>
+                  <v-spacer></v-spacer>
+                </v-card-title>
+                <v-card-text>
+                    <v-text-field label = "Recipient Name" v-model="name" outlined></v-text-field>
+                    <v-text-field label = "Recipient Email" v-model="email" outlined></v-text-field>
+                </v-card-text>
+                <v-card-actions>
+                    <v-btn class = "mb-3 ml-3" elevation="2" @click="sendEmail">Send Invite</v-btn>
+                  <v-btn color="primary" text @click="dialog2 = false">Close</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
   </v-dialog>
 </template>
 
@@ -31,6 +54,7 @@
 
 import firebase from "firebase";
 import deliveries from '../../contracts/DeliveriesInstance';
+import emailjs, {init}  from 'emailjs-com';
 
 export default {
     
@@ -43,8 +67,11 @@ export default {
             description: '',
             customerList: [],
             select: '',
-            dialog: '',
-            deliveryAddress: ''
+            dialog: false,
+            dialog2: false,
+            deliveryAddress: '',
+            email: '',
+            name: ''
         }
     },
     mounted() {
@@ -90,8 +117,20 @@ export default {
             });
             
             this.dialog = false;
+        },
+        async sendEmail() {
+            init("user_9LCMBgvoDCWBJPANp5yls");
+            try {
+                await emailjs.send('service_lgulh7n', 'template_n0czcty', {
+                to_name: this.name,
+                to_email: this.email
+                })
+
+            } catch(error) {
+                console.log({error})
+            }
         }
-    },
+    }
 
 }
 </script>

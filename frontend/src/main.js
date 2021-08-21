@@ -13,7 +13,7 @@ import VuetifyGoogleAutocomplete from 'vuetify-google-autocomplete'
 
 Vue.use(VueGoogleMaps, {
   load: {
-      key: 'AIzaSyCHCDp1V4GwXsIow7He_Am_DAJqc2a-Svk',
+      key: 'AIzaSyC4F2RO3v9qlp5X18XzzrvEjCwToHjZ0Fc',
       // This is required to use the Autocomplete plugin
       libraries: 'places', // 'places,drawing,visualization'
   },
