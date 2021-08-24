@@ -5,6 +5,7 @@ import Login from '../components/Login'
 import Dashboard from '../components/Dashboard'
 import Register from '../components/Register'
 import RegisterDetails from '../components/RegisterDetails'
+import Map from '../components/Map'
 
 Vue.use(Router)
 
@@ -36,6 +37,11 @@ const router = new Router({
         path: '/bookDelivery',
         name: 'bookDelivery',
         component: BookDelivery
+    },
+    {
+        path: '/map',
+        name: 'map',
+        component: Map
     }
 ]
 });
