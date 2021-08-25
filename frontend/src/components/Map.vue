@@ -24,23 +24,27 @@
             </GmapMap>
 
         </v-row>
-        <v-row>
+        <v-row justify="center">
             <v-btn class = "mt-3" elevation="2" @click="calculate">Calculate</v-btn>
+        </v-row>
+        <v-row justify="center">
+            <h1>Cost: €{{cost}}</h1>
         </v-row>
     </v-container>
 </template>
 
 <script>
 import firebase from 'firebase';
-const google = window.google;
+import shared from '../shared';
+
 
 export default {
     data() {
         
         return{
             userPosition: {
-                lat: 53.4239,
-                lng: -7.95
+                lat: '',
+                lng: ''
             },
             label: 'You are here',
             icon: {
@@ -53,7 +57,8 @@ export default {
                 },
             markers:[],
             distance: '',
-            selectedMarker: null
+            selectedMarker: null,
+            cost: ''
         }
     },
     beforeMount(){
@@ -90,21 +95,9 @@ export default {
        
     },
     methods: {
-        calculate(){
-            var distanceService = new google.maps.DistanceMatrixService();
-            distanceService.getDistanceMatrix({
-                origins: [this.userPosition],
-                destinations: [this.selectedMarker.position],
-                travelMode: 'DRIVING'
-            },
-            function (response, status) {
-                if (status !== google.maps.DistanceMatrixStatus.OK) {
-                    console.log('Error:', status);
-                } else {
-                    //distance in metres
-                    console.log(response.rows[0].elements[0].distance.value);
-                }
-            });
+        async calculate(){
+            var distance = await shared.distance(this.userPosition, this.selectedMarker.position);
+            this.cost = shared.cost(distance);
         }
     }
     
