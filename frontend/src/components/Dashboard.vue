@@ -187,7 +187,7 @@ export default {
       }).then(() => {
         console.log("Delivery has been delivered");
       });
-      
+
     }
   }
   
