@@ -15,18 +15,18 @@
                         :icon="icon"
                         :title="m.title"
                         :clickable="true"
-                        @click="center=m.position"
+                        @click="selectedMarker=m"
                 />
                 <GmapMarker
                         :position="userPosition"
                         :title="label"
-                        :clickable="true"
-                        @click="center=m.position"
                 />
             </GmapMap>
 
         </v-row>
-        
+        <v-row>
+            <v-btn class = "mt-3" elevation="2" @click="calculate">Calculate</v-btn>
+        </v-row>
     </v-container>
 </template>
 
@@ -52,7 +52,8 @@ export default {
                     scale: 1
                 },
             markers:[],
-            distance: ''
+            distance: '',
+            selectedMarker: null
         }
     },
     beforeMount(){
@@ -88,7 +89,24 @@ export default {
        });
        
     },
-    
+    methods: {
+        calculate(){
+            var distanceService = new google.maps.DistanceMatrixService();
+            distanceService.getDistanceMatrix({
+                origins: [this.userPosition],
+                destinations: [this.selectedMarker.position],
+                travelMode: 'DRIVING'
+            },
+            function (response, status) {
+                if (status !== google.maps.DistanceMatrixStatus.OK) {
+                    console.log('Error:', status);
+                } else {
+                    //distance in metres
+                    console.log(response.rows[0].elements[0].distance.value);
+                }
+            });
+        }
+    }
     
 }
 </script>
