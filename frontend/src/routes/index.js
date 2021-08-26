@@ -13,37 +13,42 @@ const router = new Router({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [
-    {
-        path: '/register',
-        name: 'register',
-        component: Register
-    },
-    {
-        path: '/login',
-        name: 'login',
-        component: Login
-    },
-    {
-        path: '/dashboard',
-        name: 'Dashboard',
-        component: Dashboard
-    },
-    {
-        path: '/registerDetails',
-        name: 'registerDetails',
-        component: RegisterDetails
-    },
-    {
-        path: '/bookDelivery',
-        name: 'bookDelivery',
-        component: BookDelivery
-    },
-    {
-        path: '/map',
-        name: 'map',
-        component: Map
-    }
-]
+        {
+            path: '/',
+            name: 'login',
+            component: Login
+        },
+        {
+            path: '/register',
+            name: 'register',
+            component: Register
+        },
+        {
+            path: '/login',
+            name: 'login',
+            component: Login
+        },
+        {
+            path: '/dashboard',
+            name: 'Dashboard',
+            component: Dashboard
+        },
+        {
+            path: '/registerDetails',
+            name: 'registerDetails',
+            component: RegisterDetails
+        },
+        {
+            path: '/bookDelivery',
+            name: 'bookDelivery',
+            component: BookDelivery
+        },
+        {
+            path: '/map',
+            name: 'map',
+            component: Map
+        }
+    ]
 });
 
 export default router
