@@ -7,7 +7,7 @@
       </h1>
       <v-divider></v-divider>
       <v-layout row class="mb-3 mt-3"> 
-        <v-btn small text color="grey" @click="sortBy('number')">
+        <v-btn small text color="grey">
           <v-icon left small>sort</v-icon>
           <span class="caption">By number</span>
         </v-btn>
@@ -55,7 +55,7 @@
                 <v-list-item
                   v-for="(item, index) in menuItems"
                   :key="index"
-                  @click="selectSection(item, job.ContractInstance)"
+                  @click="selectSection(item, job.ContractInstance, job.Sender)"
                 >
                   <v-list-item-title>{{ item.title }}</v-list-item-title>
                 </v-list-item>
@@ -77,6 +77,7 @@ import firebase from 'firebase';
 import delivery from '../../contracts/DeliveryInstance';
 import deliveries from '../../contracts/DeliveriesInstance';
 import BookDelivery from './BookDelivery.vue'
+import invoice from '../Invoice'
 
 
 export default {
@@ -90,7 +91,8 @@ export default {
       deliveries: '',
       menuItems: [
         { title: 'Collected' },
-        { title: 'Delivered' }
+        { title: 'Delivered' },
+        { title: 'Invoice' }
       ],
       closeOnClick: true,
       admin: true
@@ -165,13 +167,16 @@ export default {
 
       }
     },
-    selectSection(item, instance) {
+    selectSection(item, instance, sender) {
       switch(item.title) {
         case 'Collected':
           this.collected(instance);
           break
         case 'Delivered':
           this.delivered(instance);
+          break
+        case 'Invoice':
+          this.invoice(sender);
       }
     },
     async collected(instance) {
@@ -187,7 +192,9 @@ export default {
       }).then(() => {
         console.log("Delivery has been delivered");
       });
-
+    },
+    invoice(sender){
+      invoice.generatePDF(sender);
     }
   }
   
