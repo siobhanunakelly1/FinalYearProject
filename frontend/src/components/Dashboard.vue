@@ -137,7 +137,7 @@ export default {
         var senderEth = await this.deliveryInstances[i].methods.seller().call();
         var buyerEth = await this.deliveryInstances[i].methods.buyer().call();
         
-        dbRef.once('value', (snapshot) => {
+        await dbRef.once('value', (snapshot) => {
           snapshot.forEach((childSnapshot) => {
             var childKey = childSnapshot.key;
             var childData = childSnapshot.val();

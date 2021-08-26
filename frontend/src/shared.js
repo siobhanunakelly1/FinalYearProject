@@ -1,8 +1,8 @@
-const google = window.google;
+
 
 export default {
     distance: async function(origins, destinations) {
-        
+        const google = window.google;
         var distanceService = new google.maps.DistanceMatrixService();
         var distanceMatrix = await distanceService.getDistanceMatrix({
             origins: [origins],

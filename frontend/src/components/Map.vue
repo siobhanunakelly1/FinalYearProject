@@ -43,8 +43,8 @@ export default {
         
         return{
             userPosition: {
-                lat: '',
-                lng: ''
+                lat: 0,
+                lng: 0
             },
             label: 'You are here',
             icon: {

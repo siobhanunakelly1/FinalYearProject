@@ -27,7 +27,7 @@
           <v-card-actions>
               <div class="text-xs-center">
                 <v-btn class = "mb-3 ml-3" elevation="2" @click="pressed">Book</v-btn>
-                <v-btn right absolute class = "mb-3 mr-3" elevation="2" @click="dialog = false">Close</v-btn>
+                <v-btn color="primary" text @click="dialog = false">Close</v-btn>
               </div>
           </v-card-actions>
       </v-card>
@@ -89,8 +89,8 @@ export default {
         });
     },
     methods: {
-        pressed(){
-            var senderRef = firebase.database().ref("TransportCompany/Customers/" + this.user.uid);
+        async pressed(){
+            var senderRef = await firebase.database().ref("TransportCompany/Customers/" + this.user.uid);
             senderRef.on('value', (snapshot) => {
                 var s = snapshot.val();
                 this.sender = s.EthereumAccount;
@@ -119,6 +119,8 @@ export default {
             this.dialog = false;
         },
         async sendEmail() {
+            this.dialog2 = false;
+            this.dialog = false;
             init("user_9LCMBgvoDCWBJPANp5yls");
             try {
                 await emailjs.send('service_lgulh7n', 'template_n0czcty', {
