@@ -58,7 +58,7 @@ export default {
             markers:[],
             distance: '',
             selectedMarker: null,
-            cost: ''
+            cost: '',
         }
     },
     beforeMount(){

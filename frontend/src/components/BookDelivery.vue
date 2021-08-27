@@ -74,8 +74,8 @@ export default {
             name: ''
         }
     },
-    mounted() {
-        firebase.default.auth().onAuthStateChanged(user => {
+    async mounted() {
+        await firebase.default.auth().onAuthStateChanged(user => {
                 this.user = user;
             });
         var customersRef = firebase.database().ref('TransportCompany/Customers/');
@@ -87,10 +87,8 @@ export default {
                 this.customerList.push({ethAcc, comp});
             });
         });
-    },
-    methods: {
-        async pressed(){
-            var senderRef = await firebase.database().ref("TransportCompany/Customers/" + this.user.uid);
+
+        var senderRef = firebase.database().ref("TransportCompany/Customers/" + this.user.uid);
             senderRef.on('value', (snapshot) => {
                 var s = snapshot.val();
                 this.sender = s.EthereumAccount;
@@ -100,6 +98,9 @@ export default {
             transporterRef.on('value', (snapshot) => {
                 this.transporter = snapshot.val();
             });
+    },
+    methods: {
+        async pressed(){
 
             this.recipient = this.select.ethAcc;
 

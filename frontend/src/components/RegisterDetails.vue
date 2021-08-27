@@ -15,6 +15,7 @@
                         placeholder="Please type your address"
                         v-on:placechanged="getAddressData"
                         outlined
+                        country="ie"
                     >
                     </vuetify-google-autocomplete>
                     <v-text-field label = "Ethereum Account" v-model="ethereum" outlined>

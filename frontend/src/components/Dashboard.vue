@@ -115,7 +115,7 @@ export default {
               this.userEth = childDate.EthereumAccount;
             }
           });
-        });
+        });     
   },
   methods: {
     async getAllDeliveryInstances(){
