@@ -1,4 +1,5 @@
 <template>
+<div>
   <v-dialog v-model="dialog" width ="600px">
       <template v-slot:activator="{ on }">
       <v-btn  v-on="on" small text color="grey">
@@ -32,22 +33,29 @@
           </v-card-actions>
       </v-card>
       <v-dialog v-model="dialog2" max-width="500px">
-              <v-card>
-                <v-card-title>
-                  <span>Invite</span>
-                  <v-spacer></v-spacer>
-                </v-card-title>
-                <v-card-text>
-                    <v-text-field label = "Recipient Name" v-model="name" outlined></v-text-field>
-                    <v-text-field label = "Recipient Email" v-model="email" outlined></v-text-field>
-                </v-card-text>
-                <v-card-actions>
-                    <v-btn class = "mb-3 ml-3" elevation="2" @click="sendEmail">Send Invite</v-btn>
-                  <v-btn color="primary" text @click="dialog2 = false">Close</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
+            <v-card>
+            <v-card-title>
+                <span>Invite</span>
+                <v-spacer></v-spacer>
+            </v-card-title>
+            <v-card-text>
+                <v-text-field label = "Recipient Name" v-model="name" outlined></v-text-field>
+                <v-text-field label = "Recipient Email" v-model="email" outlined></v-text-field>
+            </v-card-text>
+            <v-card-actions>
+                <v-btn class = "mb-3 ml-3" elevation="2" @click="sendEmail">Send Invite</v-btn>
+                <v-btn color="primary" text @click="dialog2 = false">Close</v-btn>
+            </v-card-actions>
+            </v-card>
+        </v-dialog>
   </v-dialog>
+  <v-snackbar
+    v-model="snackbar"
+    :timeout="timeout"
+    >
+        Email Sent.
+    </v-snackbar>
+</div>
 </template>
 
 <script>
@@ -71,7 +79,9 @@ export default {
             dialog2: false,
             deliveryAddress: '',
             email: '',
-            name: ''
+            name: '',
+            snackbar: false,
+            timeout: 2000
         }
     },
     async mounted() {
@@ -120,18 +130,20 @@ export default {
             this.dialog = false;
         },
         async sendEmail() {
-            this.dialog2 = false;
-            this.dialog = false;
             init("user_9LCMBgvoDCWBJPANp5yls");
             try {
                 await emailjs.send('service_lgulh7n', 'template_n0czcty', {
                 to_name: this.name,
                 to_email: this.email
                 })
+                this.snackbar = true;
+                this.dialog2 = false;
+                this.dialog = false;
 
             } catch(error) {
                 console.log({error})
             }
+            
         }
     }
 
