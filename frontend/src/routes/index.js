@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import BookDelivery from '../components/BookDelivery'
 import Login from '../components/Login'
 import Dashboard from '../components/Dashboard'
 import Register from '../components/Register'
 import RegisterDetails from '../components/RegisterDetails'
 import Map from '../components/Map'
+import firebase from 'firebase';
 
 Vue.use(Router)
 
@@ -18,7 +18,6 @@ const router = new Router({
             name: 'login',
             component: Login,
             meta: {
-                auth: true,
                 title: 'Login'
               }
         },
@@ -27,7 +26,6 @@ const router = new Router({
             name: 'register',
             component: Register,
             meta: {
-                auth: true,
                 title: 'Sign Up'
               }
         },
@@ -35,8 +33,7 @@ const router = new Router({
             path: '/login',
             name: 'login',
             component: Login,
-            meta: {
-                auth: true,
+            meta:{
                 title: 'Login'
               }
         },
@@ -69,5 +66,16 @@ const router = new Router({
         }
     ]
 });
+
+router.beforeEach((to, from, next) => {
+    const requiresAuth = to.matched.some(record => record.meta.auth);
+    const isAuthenticated = firebase.auth().currentUser;
+    console.log("isauthenticated", isAuthenticated);
+    if (requiresAuth && !isAuthenticated) {
+      next("/login");
+    } else {
+      next();
+    }
+  });
 
 export default router
