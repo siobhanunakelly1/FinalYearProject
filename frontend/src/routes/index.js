@@ -16,37 +16,56 @@ const router = new Router({
         {
             path: '/',
             name: 'login',
-            component: Login
+            component: Login,
+            meta: {
+                auth: true,
+                title: 'Login'
+              }
         },
         {
             path: '/register',
             name: 'register',
-            component: Register
+            component: Register,
+            meta: {
+                auth: true,
+                title: 'Sign Up'
+              }
         },
         {
             path: '/login',
             name: 'login',
-            component: Login
+            component: Login,
+            meta: {
+                auth: true,
+                title: 'Login'
+              }
         },
         {
             path: '/dashboard',
             name: 'Dashboard',
-            component: Dashboard
+            component: Dashboard,
+            meta: {
+                auth: true,
+                title: 'Dashboard'
+              }
         },
         {
             path: '/registerDetails',
             name: 'registerDetails',
-            component: RegisterDetails
-        },
-        {
-            path: '/bookDelivery',
-            name: 'bookDelivery',
-            component: BookDelivery
+            component: RegisterDetails,
+            meta: {
+                auth: true,
+                title: 'Your Details'
+              }
         },
         {
             path: '/map',
             name: 'map',
-            component: Map
+            component: Map,
+            meta: {
+                auth: true,
+                title: 'Map'
+              }
         }
     ]
 });
