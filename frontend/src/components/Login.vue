@@ -21,6 +21,12 @@
                 </v-form>
             </v-card-text>
         </v-card>
+        <v-snackbar
+            v-model="snackbar"
+            :timeout="timeout"
+            >
+                Incorrect email or password.
+            </v-snackbar>
     </div>
 </template>
 
@@ -32,7 +38,9 @@ import * as firebase from "firebase/app";
                 email: '',
                 password: '',
                 error: '',
-                show: false
+                show: false,
+                snackbar: false,
+                timeout: 2000
             }
         },
         methods: {
@@ -42,7 +50,8 @@ import * as firebase from "firebase/app";
                     console.log(val)
                     this.$router.replace({name: "Dashboard"});
                 }catch(err){
-                    console.log(err)
+                    console.log(err);
+                    this.snackbar = true;
                 }
                 
             }
