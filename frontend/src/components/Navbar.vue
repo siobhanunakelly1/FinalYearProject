@@ -15,14 +15,16 @@
         </v-app-bar>
         <v-navigation-drawer app color = accent v-model="drawer">
             <v-list>
-                <v-list-item v-for="link in links" :key="link.text" router :to="link.route">
-                <v-list-item-action>
-                    <v-icon class = "white--text">{{ link.icon }}</v-icon>
-                </v-list-item-action>
-                <v-list-item-content>
-                    <v-list-item-title class = "white--text">{{ link.text }}</v-list-item-title>
-                </v-list-item-content>
-                </v-list-item>
+                <v-list-item-group v-model="group">
+                    <v-list-item v-for="link in links" :key="link.text" router :to="link.route">
+                    <v-list-item-action>
+                        <v-icon class = "white--text">{{ link.icon }}</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title class = "white--text">{{ link.text }}</v-list-item-title>
+                    </v-list-item-content>
+                    </v-list-item>
+                </v-list-item-group>
             </v-list>
         </v-navigation-drawer>
     </nav>
@@ -40,7 +42,8 @@ import firebase from "firebase"
                  links: [
                     { icon: 'dashboard', text: 'Dashboard', route: '/dashboard' },
                     { icon: 'map', text: 'Map', route: '/map' },
-                ]
+                ],
+                group: null
                 }
             
         },
@@ -54,6 +57,11 @@ import firebase from "firebase"
                 }
               });
 
+        },
+        watch: {
+            group () {
+                this.drawer = false
+            },
         },
         methods: {
             async signOut(){
