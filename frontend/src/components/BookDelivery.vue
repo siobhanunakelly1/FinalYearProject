@@ -14,6 +14,7 @@
           <v-card-text>
               <v-text-field label = "Description" v-model="description" outlined></v-text-field>
               <v-combobox 
+              allow-overflow = false
                 outlined
                 solo
                 label= "Recipient"
@@ -94,9 +95,11 @@ export default {
         customersRef.once('value', (snapshot) =>{
             snapshot.forEach((childSnapshot) => {
                 var childData = childSnapshot.val();
-                var ethAcc = childData.EthereumAccount;
-                var comp = childData.Company;
-                this.customerList.push({ethAcc, comp});
+                if(childSnapshot.key != this.user.uid){
+                    var ethAcc = childData.EthereumAccount;
+                    var comp = childData.Company;
+                    this.customerList.push({ethAcc, comp});
+                }
             });
         });
 
