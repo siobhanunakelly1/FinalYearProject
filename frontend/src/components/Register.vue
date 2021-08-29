@@ -22,6 +22,7 @@
                         <v-chip>Customer</v-chip>
                     </v-chip-group>
                     <v-btn color = "accent" class = "mt-3" elevation="2" @click="pressed">Register</v-btn>
+                    <div class="mt-5">Already have an account? Login <router-link to="/login">here.</router-link></div>
                 </v-form>
             </v-card-text>
         </v-card>
