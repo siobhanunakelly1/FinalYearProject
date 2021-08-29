@@ -19,7 +19,7 @@
         <BookDelivery/>
       </v-layout>
 
-      <v-card flat class="pa-3" v-for="job in jobs" :key="job.number">
+      <v-card flat class="pa-3" v-for="job in jobs" :key="job.ContractInstance">
         <div v-if="admin || job.SenderKey === user.uid || job.BuyerKey === user.uid">
         <v-layout row :class="`pa-3 job ${job.Status}`">
           <v-flex xs6 sm4 md2>
