@@ -27,7 +27,7 @@
             <div> {{ job.Buyer.Company }}</div>
           </v-flex>
           <v-spacer></v-spacer>
-          <v-flex xs2 sm4 md2>
+          <v-flex class="text-right" xs2 sm4 md2>
             <v-spacer></v-spacer>
             <v-chip small :class="`${job.Status} white--text my-2 caption`">{{ job.Status }}</v-chip>
             <v-menu
@@ -201,20 +201,20 @@ export default {
 <style>
 
 .job.Received{
-  border-left: 4px solid #3CD1C2;
+  border-left: 4px solid #9CCC65;
 }
 .job.Collected{
-  border-left: 4px solid yellow;
+  border-left: 4px solid #FFEE58;
 }
 .job.Created{
   border-left: 4px solid orange;
 }
 
 .v-chip.v-chip--no-color.theme--light.Received {
-  background: #3CD1C2;
+  background: #9CCC65;
 }
 .v-chip.v-chip--no-color.theme--light.Collected{
-  background: yellow;
+  background: #FFEE58;
 }
 .v-chip.v-chip--no-color.theme--light.Created{
   background: orange;
