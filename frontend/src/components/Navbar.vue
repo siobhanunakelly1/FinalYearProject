@@ -6,10 +6,12 @@
                 <span>Transporter</span>
             </v-toolbar-title>
             <v-spacer></v-spacer>
+            <div v-if = "loggedIn">
             <v-btn text color="grey" @click="signOut">
                 <span>Sign Out</span>
                 <v-icon right>exit_to_app</v-icon>
             </v-btn>
+            </div>
         </v-app-bar>
         <v-navigation-drawer app v-model="drawer">
             <v-list>
