@@ -2,24 +2,16 @@
   <div class="dashboard">
     
     <v-container class = "my-5">
-      <h1 class="subheading grey--text">
+      <h1 class="primary--text">
         <span class="font-weight-light">Dashboard</span>
       </h1>
       <v-divider></v-divider>
       <v-layout row class="mb-3 mt-3"> 
-        <v-btn small text color="grey">
-          <v-icon left small>sort</v-icon>
-          <span class="caption">By number</span>
-        </v-btn>
-        <v-btn small text color="grey" @click="sortBy('status')">
-          <v-icon left small>sort</v-icon>
-          <span class="caption">By status</span>
-        </v-btn>
         <v-spacer></v-spacer>
         <BookDelivery/>
       </v-layout>
 
-      <v-card flat class="pa-3" v-for="job in jobs" :key="job.ContractInstance">
+      <v-card flat class="pa-3" v-for="job in jobs" :key="job.Description">
         <div v-if="admin || job.SenderKey === user.uid || job.BuyerKey === user.uid">
         <v-layout row :class="`pa-3 job ${job.Status}`">
           <v-flex xs6 sm4 md2>
@@ -47,6 +39,7 @@
                   icon 
                   v-bind="attrs"
                   v-on="on"
+                  color = "primary"
                 >
                   <v-icon small>more_vert</v-icon>
                 </v-btn>
@@ -166,6 +159,9 @@ export default {
         });
 
       }
+    },
+    sortBy(prop){
+      this.deliveries.sort((a,b) => a[prop] < b[prop] ? -1 : 1)
     },
     selectSection(item, instance, sender) {
       switch(item.title) {

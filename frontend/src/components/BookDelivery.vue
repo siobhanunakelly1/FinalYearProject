@@ -3,13 +3,13 @@
   <v-dialog v-model="dialog" width ="600px">
       <template v-slot:activator="{ on }">
       <v-btn  v-on="on" small text color="grey">
-          <v-icon left small>add</v-icon>
-          <span class="caption">New Delivery</span>
+          <v-icon class="primary--text" left small>add</v-icon>
+          <span class="primary--text">New Delivery</span>
       </v-btn>
       </template>
       <v-card>
           <v-card-title>
-              <h2>Book Delivery</h2>
+              <h2 class="primary--text font-weight-light">Book Delivery</h2>
           </v-card-title>
           <v-card-text>
               <v-text-field label = "Description" v-model="description" outlined></v-text-field>
@@ -22,20 +22,22 @@
                 item-text="comp"
                 >
               </v-combobox>
-              Recipient not listed?
-              <v-btn color="primary" dark @click="dialog2 = !dialog2">Invite Them</v-btn>
+              <div>
+                <v-btn color = "accent" @click="pressed">Book</v-btn>
+                <v-btn color="primary" text @click="dialog = false">Close</v-btn>
+              </div>
           </v-card-text>
           <v-card-actions>
-              <div class="text-xs-center">
-                <v-btn class = "mb-3 ml-3" elevation="2" @click="pressed">Book</v-btn>
-                <v-btn color="primary" text @click="dialog = false">Close</v-btn>
+              <div justify = center>
+              Recipient not listed?
+              <v-btn small color="accent" dark @click="dialog2 = !dialog2">Invite Them</v-btn>
               </div>
           </v-card-actions>
       </v-card>
       <v-dialog v-model="dialog2" max-width="500px">
             <v-card>
             <v-card-title>
-                <span>Invite</span>
+                <h2 class="primary--text font-weight-light">Invite</h2>
                 <v-spacer></v-spacer>
             </v-card-title>
             <v-card-text>
@@ -43,7 +45,7 @@
                 <v-text-field label = "Recipient Email" v-model="email" outlined></v-text-field>
             </v-card-text>
             <v-card-actions>
-                <v-btn class = "mb-3 ml-3" elevation="2" @click="sendEmail">Send Invite</v-btn>
+                <v-btn color = "accent"  @click="sendEmail">Send Invite</v-btn>
                 <v-btn color="primary" text @click="dialog2 = false">Close</v-btn>
             </v-card-actions>
             </v-card>

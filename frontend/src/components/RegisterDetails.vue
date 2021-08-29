@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-card class="mx-auto my-15 pa-10" max-width="500" elevation = 5>
-            <v-card-title class="text-uppercase grey--text">
+            <v-card-title class="text-uppercase primary--text">
                 Company Details
             </v-card-title>
             <v-card-text>
@@ -30,7 +30,7 @@
                             </v-tooltip>
                             </template>
                     </v-text-field>
-                    <v-btn class = "mt-3" elevation="2" @click="pressed">Submit</v-btn>
+                    <v-btn color = "accent" class = "mt-3" elevation="2" @click="pressed">Submit</v-btn>
                 </v-form>
             </v-card-text>
         </v-card>

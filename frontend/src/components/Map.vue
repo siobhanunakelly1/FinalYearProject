@@ -25,10 +25,10 @@
 
         </v-row>
         <v-row justify="center">
-            <v-btn class = "mt-3" elevation="2" @click="calculate">Calculate</v-btn>
+            <v-btn color = "accent" class = "mt-3" elevation="2" @click="calculate">Calculate</v-btn>
         </v-row>
         <v-row justify="center">
-            <h1>Cost: €{{cost}}</h1>
+            <h1 class = "primary--text">Cost: €{{cost}}</h1>
         </v-row>
     </v-container>
 </template>

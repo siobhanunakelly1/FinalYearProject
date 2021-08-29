@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-card class="mx-auto my-15 pa-10" max-width="500" elevation = 5>
-            <v-card-title class="text-uppercase grey--text">
+            <v-card-title class="text-uppercase primary--text">
                 Login
             </v-card-title>
             <v-card-text>
@@ -16,7 +16,7 @@
                         'password'"
                         :append-icon="show ?'mdi-eye':'mdi-eye-off'"   
                         @click:append="show=!show"></v-text-field>
-                    <v-btn class = "mt-3" elevation="2" @click="pressed">Login</v-btn>
+                    <v-btn color = "accent" class = "mt-3" elevation="2" @click="pressed">Login</v-btn>
                     <div class="mt-5">Need an account? Click here to <router-link to="/register">register</router-link></div>
                 </v-form>
             </v-card-text>
@@ -64,4 +64,5 @@ import * as firebase from "firebase/app";
     color: red;
     font-size: 18px;
 }
+
 </style>
