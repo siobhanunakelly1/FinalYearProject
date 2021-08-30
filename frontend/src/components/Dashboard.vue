@@ -48,7 +48,7 @@
                 <v-list-item
                   v-for="(item, index) in menuItems"
                   :key="index"
-                  @click="selectSection(item, job.ContractInstance, job.Sender)"
+                  @click="selectSection(item, job.ContractInstance, job.Sender, job.Cost)"
                 >
                   <v-list-item-title>{{ item.title }}</v-list-item-title>
                 </v-list-item>
@@ -164,7 +164,7 @@ export default {
     sortBy(prop){
       this.deliveries.sort((a,b) => a[prop] < b[prop] ? -1 : 1)
     },
-    selectSection(item, instance, sender) {
+    selectSection(item, instance, sender, cost) {
       switch(item.title) {
         case 'Collected':
           this.collected(instance);
@@ -173,7 +173,7 @@ export default {
           this.delivered(instance);
           break
         case 'Invoice':
-          this.invoice(sender);
+          this.invoice(sender, cost);
       }
     },
     async collected(instance) {
@@ -190,8 +190,8 @@ export default {
         console.log("Delivery has been delivered");
       });
     },
-    invoice(sender){
-      invoice.generatePDF(sender);
+    invoice(sender, cost){
+      invoice.generatePDF(sender, cost);
     }
   }
   

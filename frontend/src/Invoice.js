@@ -5,19 +5,20 @@ export default {
         heading: "Invoice",
         address: [],
         date: '',
-        items: [
-        { title: "Delivery", body: "€500" },
-        { title: "Overnight", body: "€150" },
-        { title: "", body: "" },
-        { title: "Total", body: "€650" },
-        ],
-    generatePDF: function (sender) {
+        items: [],
+    generatePDF: function (sender, cost) {
         this.date = new Date().toLocaleDateString('en-GB');
+        console.log(cost);
         this.address.push(sender.Company, sender.Address.name, sender.Address.country);
         const columns = [
         { title: "Description", dataKey: "title" },
         { title: "Price", dataKey: "body" }
         ];
+        this.items.push({
+            title: "Delivery", body: "€" + cost
+        },{ title: "", body: "" },{ title: "", body: "" },
+        { title: "Total", body: "€" + cost },
+        )
         const doc = new jsPDF({
         orientation: "portrait",
         unit: "in",
