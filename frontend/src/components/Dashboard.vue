@@ -8,7 +8,7 @@
       <v-divider></v-divider>
       <v-layout row class="mb-3 mt-3"> 
         <v-spacer></v-spacer>
-        <BookDelivery/>
+        <BookDelivery v-if = "!admin"/>
       </v-layout>
 
       <v-card flat class="pa-3" v-for="job in jobs" :key="job.Description">
