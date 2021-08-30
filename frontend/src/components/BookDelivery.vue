@@ -14,7 +14,6 @@
           <v-card-text>
               <v-text-field label = "Description" v-model="description" outlined></v-text-field>
               <v-combobox 
-              allow-overflow = false
                 outlined
                 solo
                 label= "Recipient"
@@ -23,6 +22,11 @@
                 item-text="comp"
                 >
               </v-combobox>
+              <v-checkbox
+                v-model="checkbox"
+                label="Overnight"
+                color = "primary"
+            ></v-checkbox>
               <div>
                 <v-btn color = "accent" @click="pressed">Book</v-btn>
                 <v-btn color="primary" text @click="dialog = false">Close</v-btn>
@@ -66,6 +70,7 @@
 import firebase from "firebase";
 import deliveries from '../../contracts/DeliveriesInstance';
 import emailjs, {init}  from 'emailjs-com';
+import shared from '../shared';
 
 export default {
     
@@ -84,7 +89,16 @@ export default {
             email: '',
             name: '',
             snackbar: false,
-            timeout: 2000
+            timeout: 2000,
+            origin: {
+                lat: 0,
+                lng: 0
+            },
+            destination: {
+                lat: 0,
+                lng: 0
+            },
+            checkbox: false
         }
     },
     async mounted() {
@@ -98,7 +112,9 @@ export default {
                 if(childSnapshot.key != this.user.uid){
                     var ethAcc = childData.EthereumAccount;
                     var comp = childData.Company;
-                    this.customerList.push({ethAcc, comp});
+                    var lat = childData.Address.latitude;
+                    var lng = childData.Address.longitude;
+                    this.customerList.push({ethAcc, comp, lat, lng});
                 }
             });
         });
@@ -107,6 +123,8 @@ export default {
             senderRef.on('value', (snapshot) => {
                 var s = snapshot.val();
                 this.sender = s.EthereumAccount;
+                this.origin.lat = s.Address.latitude
+                this.origin.lng = s.Address.longitude;
             });
 
             var transporterRef = firebase.database().ref("TransportCompany/EthereumAccount");
@@ -118,8 +136,12 @@ export default {
         async pressed(){
 
             this.recipient = this.select.ethAcc;
+            this.destination.lat = this.select.lat;
+            this.destination.lng = this.select.lng;
 
-            deliveries.methods.createDelivery(this.transporter, this.recipient, this.description, 1)
+            var distance = await shared.distance(this.origin, this.destination);
+            var cost = shared.cost(distance, this.checkbox);
+            deliveries.methods.createDelivery(this.transporter, this.recipient, this.description, cost)
             .send({from:this.sender}).then(() => {
                 return deliveries.methods.returnAllDeliveries().call();
             }).then((listDeliveries) => {

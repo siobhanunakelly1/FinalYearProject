@@ -3,7 +3,7 @@
 export default {
     distance: async function(origins, destinations) {
         const google = window.google;
-        var distanceService = new google.maps.DistanceMatrixService();
+        var distanceService = await new google.maps.DistanceMatrixService();
         var distanceMatrix = await distanceService.getDistanceMatrix({
             origins: [origins],
             destinations: [destinations],
@@ -21,6 +21,6 @@ export default {
         if(overnight){
             cost= cost + 50;
         }
-        return cost;
+        return cost.toFixed(0);
     }
 }

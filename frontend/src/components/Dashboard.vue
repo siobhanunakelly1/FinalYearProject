@@ -129,7 +129,7 @@ export default {
       for (i = 0; i < this.deliveryInstances.length; i++) {
         var senderEth = await this.deliveryInstances[i].methods.seller().call();
         var buyerEth = await this.deliveryInstances[i].methods.buyer().call();
-        
+        var cost = await this.deliveryInstances[i].methods.cost().call();
         await dbRef.once('value', (snapshot) => {
           snapshot.forEach((childSnapshot) => {
             var childKey = childSnapshot.key;
@@ -155,7 +155,8 @@ export default {
           'Buyer': buyer,
           'BuyerKey': buyerKey,
           'Description': description,
-          'Status': status
+          'Status': status,
+          'Cost': cost
         });
 
       }
