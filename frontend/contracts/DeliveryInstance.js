@@ -25,7 +25,7 @@ const abi =[
 			},
 			{
 				"internalType": "uint256",
-				"name": "anID",
+				"name": "price",
 				"type": "uint256"
 			}
 		],
@@ -54,12 +54,12 @@ const abi =[
 	},
 	{
 		"inputs": [],
-		"name": "description",
+		"name": "cost",
 		"outputs": [
 			{
-				"internalType": "string",
+				"internalType": "uint256",
 				"name": "",
-				"type": "string"
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -67,12 +67,12 @@ const abi =[
 	},
 	{
 		"inputs": [],
-		"name": "id",
+		"name": "description",
 		"outputs": [
 			{
-				"internalType": "uint256",
+				"internalType": "string",
 				"name": "",
-				"type": "uint256"
+				"type": "string"
 			}
 		],
 		"stateMutability": "view",

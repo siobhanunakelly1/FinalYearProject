@@ -1,6 +1,6 @@
 import web3 from './web3-metamask';
 
-const address = '0x6CC2b6F5Dc4BdD44d2d7769Aa5CdeF49302839A3'
+const address = '0x7DD1056b09D00eCeD255B9105a8243Ea30F63718'
 
 
 const abi = [
@@ -23,7 +23,7 @@ const abi = [
 			},
 			{
 				"internalType": "uint256",
-				"name": "id",
+				"name": "cost",
 				"type": "uint256"
 			}
 		],

@@ -16,7 +16,11 @@ export default {
         });
         return distanceMatrix.rows[0].elements[0].distance.value/1000;
     },
-    cost: function(distance){
-        return distance*8;
+    cost: function(distance, overnight){
+        var cost = distance*8;
+        if(overnight){
+            cost= cost + 50;
+        }
+        return cost;
     }
 }

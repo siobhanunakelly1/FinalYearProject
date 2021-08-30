@@ -7,15 +7,18 @@ contract Deliveries{
 
     function createDelivery (
     address transporter,
-    address buyer
+    address buyer,
+    string memory description, 
+    uint256 cost
     ) public{
-        Delivery newDelivery = new Delivery(msg.sender, transporter, buyer);
+        Delivery newDelivery = new Delivery(msg.sender, transporter, buyer, description, cost);
         deliveries.push(newDelivery);
     }
 
     function returnAllDeliveries() public view returns(Delivery[] memory){
         return deliveries;
     }
+
 
 }
 
@@ -24,12 +27,16 @@ contract Delivery {
     address public transporter;
     address public buyer;
     string public status;
+    string public description;
+    uint256 public cost;
 
-    constructor(address aSeller, address aTransporter, address aBuyer) {
+    constructor(address aSeller, address aTransporter, address aBuyer, string memory desc, uint256 price) {
         seller = aSeller;
         transporter = aTransporter;
         buyer = aBuyer;
         status = "Created";
+        description = desc;
+        cost = price;
     }
     
 
@@ -38,8 +45,8 @@ contract Delivery {
         status = "Collected";
     }
 
-    function recieved() public{
-        require(msg.sender == buyer, "Only buyer can recieve the goods");
+    function received() public{
+        require(msg.sender == buyer, "Only buyer can receive the goods");
         status = "Received";
     }
 
