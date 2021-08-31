@@ -41,7 +41,7 @@ import firebase from "firebase"
                 drawer: false,
                  links: [
                     { icon: 'dashboard', text: 'Dashboard', route: '/dashboard' },
-                    { icon: 'place', text: 'Map', route: '/map' },
+                    { icon: 'place', text: 'Enquiry', route: '/map' },
                 ],
                 group: null
                 }

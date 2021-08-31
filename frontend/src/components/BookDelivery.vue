@@ -140,7 +140,7 @@ export default {
             this.destination.lng = this.select.lng;
 
             var distance = await shared.distance(this.origin, this.destination);
-            var cost = shared.cost(distance, this.checkbox);
+            var cost = await shared.cost(distance, this.checkbox);
             deliveries.methods.createDelivery(this.transporter, this.recipient, this.description, cost)
             .send({from:this.sender}).then(() => {
                 return deliveries.methods.returnAllDeliveries().call();

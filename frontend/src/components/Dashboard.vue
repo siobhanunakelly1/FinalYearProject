@@ -161,9 +161,6 @@ export default {
 
       }
     },
-    sortBy(prop){
-      this.deliveries.sort((a,b) => a[prop] < b[prop] ? -1 : 1)
-    },
     selectSection(item, instance, sender, cost) {
       switch(item.title) {
         case 'Collected':
